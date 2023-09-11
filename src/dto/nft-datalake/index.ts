@@ -13,3 +13,5 @@ export * from './nft-history-response';
 export * from './nft-token-transfer-item';
 export * from './nft-token-transfer-history-response';
 export * from './nft-data-query-boundaries';
+export * from './additional-nft-data-query';
+export * from './basic-nft-item-data-query';

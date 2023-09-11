@@ -12,6 +12,7 @@ import {LATEST_TAG} from "../constants";
 import {TsunamiRequestHandler} from "./tsunami-request-handler";
 import {GetTsunamiTransfersQuery} from "../dto/get-tsunami-transfers-query";
 import {NftRequestHandler} from "./nft-request-handler";
+import {AdditionalNftDataQuery, BasicNftItemDataQuery} from "../dto/nft-datalake";
 
 export class ParsiqClient {
 
@@ -160,9 +161,29 @@ export class ParsiqClient {
   }
 
   public readonly nft = {
-    getByAddress: (address: string) => {
-      return this.nftRequestHandler.getAddressNFTs(address, {});
+    getByAddress: (address: string, criteria: BasicNftItemDataQuery) => {
+      return this.nftRequestHandler.getAddressNFTs(address, criteria,{});
     },
+
+    getAddressHistory: (address: string, criteria: BasicNftItemDataQuery) => {
+      return this.nftRequestHandler.getAddressHistory(address, criteria,{});
+    },
+
+    getTokenHistory: (tokenId: string, contract: string, criteria: AdditionalNftDataQuery) => {
+      return this.nftRequestHandler.getTokenHistory(tokenId, contract, criteria, {});
+    },
+
+    getCollectionHolders: (contract: string, criteria: AdditionalNftDataQuery) => {
+      return this.nftRequestHandler.getCollectionHolders(contract, criteria, {});
+    },
+
+    getMetadata: (tokenId: string, contract: string) => {
+      return this.nftRequestHandler.getTokenMetadata(tokenId, contract);
+    },
+
+    getContractMetadata: (contract: string) => {
+      return this.nftRequestHandler.getContractMetadata(contract);
+    }
   }
 
   public readonly balances = {

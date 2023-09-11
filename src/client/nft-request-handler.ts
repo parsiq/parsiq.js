@@ -1,11 +1,22 @@
 import {HttpClient} from "./http-client";
 import {ChainId} from "../enum/chain-id";
-import {AxiosRequestConfig, isAxiosError} from "axios";
+import {AxiosRequestConfig, HttpStatusCode, isAxiosError} from "axios";
 import {IAxiosRetryConfig} from "axios-retry";
 import {convertForRequest} from "./convertor";
 import {TsunamiError} from "./tsunami-error";
-import {NftAddressInventoryItem, NftRangeResponse} from "../dto/nft-datalake";
+import {
+    NftAddressInventoryHistoryItem,
+    NftAddressInventoryItem,
+    AdditionalNftDataQuery,
+    NftRangeResponse,
+    BasicNftItemDataQuery,
+    NftTokenTransferItem,
+    NftCollectionTokenHolder,
+    NftHistoryItem,
+    NftCollectionMetadata
+} from "../dto/nft-datalake";
 import {NftDataQueryBoundaries} from "../dto/nft-datalake/nft-data-query-boundaries";
+import {TsunamiBlock} from "../dto";
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed NFT DL response';
 const REQUEST_FAILED_MESSAGE = 'NFT DL request failed';
@@ -34,19 +45,94 @@ export class NftRequestHandler extends HttpClient {
         this.instance.defaults.baseURL = baseUrl(chain);
     }
 
-    public async *getAddressNFTs(address: string, boundaries: NftDataQueryBoundaries): AsyncGenerator<NftAddressInventoryItem, void, undefined> {
+    public async *getAddressNFTs(address: string, criteria: BasicNftItemDataQuery, boundaries: NftDataQueryBoundaries): AsyncGenerator<NftAddressInventoryItem, void, undefined> {
         const iterator = this.queryNftDl<NftAddressInventoryItem>(
             `/${address}/inventory`,
-            {},
+            criteria,
             boundaries,
         );
-        for await (const blocks of iterator) {
-            yield* blocks;
+        for await (const data of iterator) {
+            yield* data;
+        }
+    }
+
+    public async *getAddressHistory(address: string, criteria: BasicNftItemDataQuery, boundaries: NftDataQueryBoundaries): AsyncGenerator<NftAddressInventoryHistoryItem, void, undefined> {
+        const iterator = this.queryNftDl<NftAddressInventoryHistoryItem>(
+            `/${address}/history`,
+            criteria,
+            boundaries,
+        );
+        for await (const data of iterator) {
+            yield *data;
+        }
+    }
+
+    public async *getTokenHistory(tokenId: string, contract: string, criteria: AdditionalNftDataQuery, boundaries: NftDataQueryBoundaries): AsyncGenerator<NftCollectionTokenHolder, void, undefined> {
+        const iterator = this.queryNftDl<NftCollectionTokenHolder>(
+            `/${contract}/${tokenId}/history`,
+            criteria,
+            boundaries,
+        );
+        for await (const data of iterator) {
+            yield *data;
+        }
+    }
+
+    public async *getCollectionHolders(contract: string, criteria: AdditionalNftDataQuery, boundaries: NftDataQueryBoundaries): AsyncGenerator<NftTokenTransferItem, void, undefined> {
+        const iterator = this.queryNftDl<NftTokenTransferItem>(
+            `/${contract}/owner`,
+            criteria,
+            boundaries,
+        );
+        for await (const data of iterator) {
+            yield *data;
+        }
+    }
+
+    public async getTokenMetadata(tokenId: string, contract: string): Promise<Omit<NftHistoryItem, 'id'>> {
+        try {
+            const response = await this.instance.get<Omit<NftHistoryItem, 'id'>>(`/${contract}/${tokenId}/metadata`);
+            if (!response?.data) {
+                throw new Error(MALFORMED_RESPONSE_MESSAGE);
+            }
+
+            return response.data;
+        } catch (error) {
+            if (isAxiosError(error)) {
+                throw new TsunamiError(
+                    error.response?.data?.message ?? REQUEST_FAILED_MESSAGE,
+                    error.response?.status ?? null,
+                    error.response?.data?.error ?? null,
+                    error.cause ?? null,
+                );
+            }
+            throw new TsunamiError(REQUEST_FAILED_MESSAGE, null, null, error);
+        }
+    }
+
+    public async getContractMetadata(contract: string): Promise<NftCollectionMetadata> {
+        try {
+            const response = await this.instance.get<NftCollectionMetadata>(`/${contract}/contract-data`);
+            if (!response?.data) {
+                throw new Error(MALFORMED_RESPONSE_MESSAGE);
+            }
+
+            return response.data;
+        } catch (error) {
+            if (isAxiosError(error)) {
+                throw new TsunamiError(
+                    error.response?.data?.message ?? REQUEST_FAILED_MESSAGE,
+                    error.response?.status ?? null,
+                    error.response?.data?.error ?? null,
+                    error.cause ?? null,
+                );
+            }
+            throw new TsunamiError(REQUEST_FAILED_MESSAGE, null, null, error);
         }
     }
 
     protected async *queryNftDl<
-        Item extends NftAddressInventoryItem = any,
+        Item extends NftAddressInventoryItem | NftAddressInventoryHistoryItem | NftTokenTransferItem | NftCollectionTokenHolder = any,
     >(
         endpoint: string,
         criteria: Record<string, any>,
@@ -81,7 +167,7 @@ export class NftRequestHandler extends HttpClient {
     }
 
     protected async doRequest<
-        Item extends NftAddressInventoryItem = any,
+        Item extends NftAddressInventoryItem | NftAddressInventoryHistoryItem | NftTokenTransferItem | NftCollectionTokenHolder = any,
     >(endpoint: string, params: Record<string, string | number>) {
         const response = await this.instance
             .get<{ range: NftRangeResponse; items: Item[] }>(endpoint, {
