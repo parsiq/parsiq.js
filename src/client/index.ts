@@ -1,3 +1,4 @@
 export * from './tsunami-client-interface';
-export * from './tsunami-client';
+export * from './parsiq-client';
 export * from './tsunami-error';
+export * from './tsunami-request-handler';
