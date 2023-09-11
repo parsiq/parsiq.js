@@ -9,12 +9,14 @@ import {IAxiosRetryConfig} from 'axios-retry';
 import {ChainId} from '../enum/chain-id';
 import {GetWalletTransactionsQuery} from '../dto/get-wallet-transactions-query';
 import {LATEST_TAG} from "../constants";
-import {TsuanmiRequestHandler} from "./tsunami-request-handler";
+import {TsunamiRequestHandler} from "./tsunami-request-handler";
 import {GetTsunamiTransfersQuery} from "../dto/get-tsunami-transfers-query";
+import {NftRequestHandler} from "./nft-request-handler";
 
 export class ParsiqClient {
 
-  private readonly tsunamiRequestHandler: TsuanmiRequestHandler
+  private readonly tsunamiRequestHandler: TsunamiRequestHandler
+  private readonly nftRequestHandler: NftRequestHandler
   constructor(
     apiKey: string,
     chain: ChainId,
@@ -23,7 +25,8 @@ export class ParsiqClient {
       retryConfig: {},
     },
   ) {
-    this.tsunamiRequestHandler = new TsuanmiRequestHandler(apiKey, chain, config);
+    this.tsunamiRequestHandler = new TsunamiRequestHandler(apiKey, chain, config);
+    this.nftRequestHandler = new NftRequestHandler(apiKey, chain, config);
   }
 
   public readonly blocks = {
@@ -156,11 +159,13 @@ export class ParsiqClient {
     },
   }
 
-  public readonly nft: () => {
-    //TODO:
+  public readonly nft = {
+    getByAddress: (address: string) => {
+      return this.nftRequestHandler.getAddressNFTs(address, {});
+    },
   }
 
-  public readonly balances: () => {
+  public readonly balances = {
     //TODO:
   }
 }

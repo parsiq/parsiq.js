@@ -24,9 +24,9 @@ const baseUrl = (chain: ChainId) => {
     if (!Object.values(ChainId).includes(chain)) {
         throw new Error('Invalid chain provided');
     }
-    return `https://api.parsiq.net/tsunami/${chain}/v1/`;
+    return TSUNAMI_BASE_URL + `${chain}/v1/`;
 };
-export class TsuanmiRequestHandler extends HttpClient implements TsunamiClient {
+export class TsunamiRequestHandler extends HttpClient implements TsunamiClient {
     constructor(
         apiKey: string,
         chain: ChainId,
