@@ -1,6 +1,6 @@
 import {HttpClient} from "./http-client";
 import {ChainId} from "../enum/chain-id";
-import {AxiosRequestConfig, HttpStatusCode, isAxiosError} from "axios";
+import {AxiosRequestConfig, isAxiosError} from "axios";
 import {IAxiosRetryConfig} from "axios-retry";
 import {convertForRequest} from "./convertor";
 import {TsunamiError} from "./tsunami-error";
@@ -15,8 +15,7 @@ import {
     NftHistoryItem,
     NftCollectionMetadata
 } from "../dto/nft-datalake";
-import {NftDataQueryBoundaries} from "../dto/nft-datalake/nft-data-query-boundaries";
-import {TsunamiBlock} from "../dto";
+import {NftDataQueryBoundaries} from "../dto/nft-datalake";
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed NFT DL response';
 const REQUEST_FAILED_MESSAGE = 'NFT DL request failed';
