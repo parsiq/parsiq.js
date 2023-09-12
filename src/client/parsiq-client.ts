@@ -34,8 +34,8 @@ export class ParsiqClient {
   }
 
   public readonly blocks = {
-    getByBlockNumber: (blockNumber: number) => {
-      return this.tsunamiRequestHandler.getBlockByNumber(blockNumber);
+    getByBlockNumber: (blockNumberStart: number, blockNumberEnd: number) => {
+      return this.tsunamiRequestHandler.getBlocks(blockNumberStart, blockNumberEnd);
     },
 
     getByTimestamp: (start: number, end: number) => {

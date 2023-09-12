@@ -46,7 +46,6 @@ export class TsunamiRequestHandler extends HttpClient implements TsunamiClient {
         },
     ) {
         const { axiosConfig = {}, retryConfig = {} } = config;
-        console.log(baseUrl(chain));
         super(baseUrl(chain), apiKey, axiosConfig, retryConfig);
     }
 
