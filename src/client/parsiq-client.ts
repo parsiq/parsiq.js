@@ -13,11 +13,13 @@ import {TsunamiRequestHandler} from "./tsunami-request-handler";
 import {GetTsunamiTransfersQuery} from "../dto/get-tsunami-transfers-query";
 import {NftRequestHandler} from "./nft-request-handler";
 import {AdditionalNftDataQuery, BasicNftItemDataQuery} from "../dto/nft-datalake";
+import {BalancesRequestHandler} from "./balances-request-handler";
 
 export class ParsiqClient {
 
-  private readonly tsunamiRequestHandler: TsunamiRequestHandler
-  private readonly nftRequestHandler: NftRequestHandler
+  private readonly tsunamiRequestHandler: TsunamiRequestHandler;
+  private readonly nftRequestHandler: NftRequestHandler;
+  private readonly balancesRequestHandler: BalancesRequestHandler;
   constructor(
     apiKey: string,
     chain: ChainId,
@@ -28,6 +30,7 @@ export class ParsiqClient {
   ) {
     this.tsunamiRequestHandler = new TsunamiRequestHandler(apiKey, chain, config);
     this.nftRequestHandler = new NftRequestHandler(apiKey, chain, config);
+    this.balancesRequestHandler = new BalancesRequestHandler(apiKey, chain, config);
   }
 
   public readonly blocks = {
@@ -183,11 +186,21 @@ export class ParsiqClient {
 
     getContractMetadata: (contract: string) => {
       return this.nftRequestHandler.getContractMetadata(contract);
-    }
+    },
   }
 
   public readonly balances = {
-    //TODO:
+    getByAddress: (address: string) => {
+      return this.balancesRequestHandler.getByAddress(address);
+    },
+
+    getByContract: (contract: string) => {
+      return this.balancesRequestHandler.getByContract(contract);
+    },
+
+    getContractMetadata: (contract: string) => {
+      return this.balancesRequestHandler.getContractMetadata(contract);
+    },
   }
 }
 

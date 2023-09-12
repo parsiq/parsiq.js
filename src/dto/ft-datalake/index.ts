@@ -6,3 +6,5 @@ export * from './ft-range-response';
 export * from './ft-token-holder-by-contract-item';
 export * from './ft-token-holder-by-contract-response';
 export * from './ft-token-info-item-with-supplies';
+export * from './balances-data-query-boundaries';
+export * from './balances-range-response';
