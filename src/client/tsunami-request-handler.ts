@@ -30,12 +30,6 @@ import {TSUNAMI_BASE_URL} from "./urls";
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed Tsunami response';
 const REQUEST_FAILED_MESSAGE = 'Tsunami request failed';
 
-const baseUrl = (chain: ChainId) => {
-    if (!Object.values(ChainId).includes(chain)) {
-        throw new Error('Invalid chain provided');
-    }
-    return TSUNAMI_BASE_URL + `${chain}/v1/`;
-};
 export class TsunamiRequestHandler extends HttpClient implements TsunamiClient {
     constructor(
         apiKey: string,
@@ -46,11 +40,7 @@ export class TsunamiRequestHandler extends HttpClient implements TsunamiClient {
         },
     ) {
         const { axiosConfig = {}, retryConfig = {} } = config;
-        super(baseUrl(chain), apiKey, axiosConfig, retryConfig);
-    }
-
-    public setChain(chain: ChainId) {
-        this.instance.defaults.baseURL = baseUrl(chain);
+        super(TSUNAMI_BASE_URL, chain, apiKey, axiosConfig, retryConfig);
     }
 
     public async getBlockByNumber(blockNumber: number) {
@@ -122,12 +112,10 @@ export class TsunamiRequestHandler extends HttpClient implements TsunamiClient {
         try {
             const response = await this.instance.get<TsunamiBlock>('/blocks/latest');
             if (!response?.data) {
-                console.log('here')
                 throw new Error(MALFORMED_RESPONSE_MESSAGE);
             }
             return response.data;
         } catch (error) {
-            console.log('or here')
             if (isAxiosError(error)) {
                 throw new TsunamiError(
                     error.response?.data?.message ?? REQUEST_FAILED_MESSAGE,

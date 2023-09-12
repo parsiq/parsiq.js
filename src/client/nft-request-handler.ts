@@ -21,13 +21,6 @@ import {NFT_BASE_URL} from "./urls";
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed NFT DL response';
 const REQUEST_FAILED_MESSAGE = 'NFT DL request failed';
 
-const baseUrl = (chain: ChainId) => {
-    if (!Object.values(ChainId).includes(chain)) {
-        throw new Error('Invalid chain provided');
-    }
-    return NFT_BASE_URL + `${chain}/v1/`;
-};
-
 export class NftRequestHandler extends HttpClient {
     constructor(
         apiKey: string,
@@ -38,11 +31,7 @@ export class NftRequestHandler extends HttpClient {
         },
     ) {
         const {axiosConfig = {}, retryConfig = {}} = config;
-        super(baseUrl(chain), apiKey, axiosConfig, retryConfig);
-    }
-
-    public setChain(chain: ChainId) {
-        this.instance.defaults.baseURL = baseUrl(chain);
+        super(NFT_BASE_URL, chain, apiKey, axiosConfig, retryConfig);
     }
 
     public async *getAddressNFTs(address: string, criteria: BasicNftItemDataQuery, boundaries: NftDataQueryBoundaries): AsyncGenerator<NftAddressInventoryItem, void, undefined> {

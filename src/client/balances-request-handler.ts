@@ -15,13 +15,6 @@ import {BALANCES_BASE_URL} from "./urls";
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed NFT DL response';
 const REQUEST_FAILED_MESSAGE = 'NFT DL request failed';
 
-const baseUrl = (chain: ChainId) => {
-    if (!Object.values(ChainId).includes(chain)) {
-        throw new Error('Invalid chain provided');
-    }
-    return BALANCES_BASE_URL + `${chain}/v1/`;
-};
-
 export class BalancesRequestHandler extends HttpClient {
     constructor(
         apiKey: string,
@@ -32,11 +25,7 @@ export class BalancesRequestHandler extends HttpClient {
         },
     ) {
         const {axiosConfig = {}, retryConfig = {}} = config;
-        super(baseUrl(chain), apiKey, axiosConfig, retryConfig);
-    }
-
-    public setChain(chain: ChainId) {
-        this.instance.defaults.baseURL = baseUrl(chain);
+        super(BALANCES_BASE_URL, chain, apiKey, axiosConfig, retryConfig);
     }
 
     public async *getByAddress(address: string): AsyncGenerator<FtTokenHolderByAddressItem, void, undefined> {
