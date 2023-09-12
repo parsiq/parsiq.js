@@ -34,7 +34,7 @@ export class ParsiqClient {
   }
 
   public readonly blocks = {
-    getByNumber: (blockNumber: number) => {
+    getByBlockNumber: (blockNumber: number) => {
       return this.tsunamiRequestHandler.getBlockByNumber(blockNumber);
     },
 
@@ -52,36 +52,54 @@ export class ParsiqClient {
   }
 
   public readonly logs = {
-    getByBlockRange: (blockNumberStart: number, blockNumberEnd: number | typeof LATEST_TAG, criteria: GetTsunamiEventQuery) => {
+    getByBlockNumber: (blockNumberStart: number, blockNumberEnd: number | typeof LATEST_TAG, criteria: GetTsunamiEventQuery , abi?: any) => {
+      if(abi) {
+        return this.tsunamiRequestHandler.getDecodedEvents(criteria,{block_number_start: blockNumberStart, block_number_end: blockNumberEnd}, abi);
+      }
       return this.tsunamiRequestHandler.getEvents(criteria, {block_number_start: blockNumberStart, block_number_end: blockNumberEnd});
     },
 
-    getByTimestamp: (timestampStart: number, timestampEnd: number, criteria: GetTsunamiEventQuery) => {
+    getByTimestamp: (timestampStart: number, timestampEnd: number, criteria: GetTsunamiEventQuery, abi?: any) => {
+      if(abi) {
+        return this.tsunamiRequestHandler.getDecodedEvents(criteria,{timestamp_start: timestampStart, timestamp_end: timestampEnd}, abi);
+      }
       return this.tsunamiRequestHandler.getEvents(criteria, {timestamp_start: timestampStart, timestamp_end: timestampEnd});
     },
 
-    getByBlockHash: (blockHash: string, criteria: GetTsunamiEventQuery) => {
+    getByBlockHash: (blockHash: string, criteria: GetTsunamiEventQuery, abi?: any) => {
+      if(abi) {
+        return this.tsunamiRequestHandler.getDecodedEvents(criteria,{block_hash: blockHash}, abi);
+      }
       return this.tsunamiRequestHandler.getEvents(criteria, {block_hash: blockHash});
-    }
+    },
   }
 
   public readonly internalTransactions = {
-    getByBlockRange: (blockNumberStart: number, blockNumberEnd: number | typeof LATEST_TAG, criteria: GetTsunamiCallQuery) => {
+    getByBlockNumber: (blockNumberStart: number, blockNumberEnd: number | typeof LATEST_TAG, criteria: GetTsunamiCallQuery, abi?: any) => {
+      if(abi) {
+        return this.tsunamiRequestHandler.getDecodedCalls(criteria, {block_number_start: blockNumberStart, block_number_end: blockNumberEnd}, abi);
+      }
       return this.tsunamiRequestHandler.getCalls(criteria, {block_number_start: blockNumberStart, block_number_end: blockNumberEnd});
     },
 
-    getByTimestamp: (timestampStart: number, timestampEnd: number, criteria: GetTsunamiCallQuery) => {
+    getByTimestamp: (timestampStart: number, timestampEnd: number, criteria: GetTsunamiCallQuery, abi?: any) => {
+      if(abi) {
+        return this.tsunamiRequestHandler.getDecodedCalls(criteria, {timestamp_start: timestampStart, timestamp_end: timestampEnd}, abi);
+      }
       return this.tsunamiRequestHandler.getCalls(criteria, {timestamp_start: timestampStart, timestamp_end: timestampEnd});
     },
 
-    getByBlockHash: (blockHash: string, criteria: GetTsunamiCallQuery) => {
+    getByBlockHash: (blockHash: string, criteria: GetTsunamiCallQuery, abi?: any) => {
+      if(abi) {
+        return this.tsunamiRequestHandler.getDecodedCalls(criteria, {block_hash: blockHash}, abi);
+      }
       return this.tsunamiRequestHandler.getCalls(criteria, {block_hash: blockHash});
     }
   }
 
   public readonly transactions = {
     byAddress: {
-      getByBlockRange: (address: string, blockNumberStart: number, blockNumberEnd: number | typeof LATEST_TAG, criteria: GetWalletTransactionsQuery) => {
+      getByBlockNumber: (address: string, blockNumberStart: number, blockNumberEnd: number | typeof LATEST_TAG, criteria: GetWalletTransactionsQuery) => {
         return this.tsunamiRequestHandler.getWalletTransactions(address, criteria, {block_number_start: blockNumberStart, block_number_end: blockNumberEnd});
       },
 
@@ -119,7 +137,7 @@ export class ParsiqClient {
       },
     },
 
-    destructions: {
+    selfDestructions: {
       getByBlockRange:(blockNumberStart: number, blockNumberEnd: number | typeof LATEST_TAG, criteria: GetContractSelfDestructsQuery) => {
         return this.tsunamiRequestHandler.getContractSelfDestructs(criteria, {block_number_start: blockNumberStart, block_number_end: blockNumberEnd});
       },

@@ -17,3 +17,6 @@ export * from './tsunami-contract-self-destruct';
 export * from './tsunami-contract-create';
 export * from './get-contract-self-destructs-query';
 export * from './get-contract-create-query';
+export * from './decoded-tsunami-call';
+export * from './decoded-tsunami-event-belonging-to-call';
+export * from './decoded-tsunami-event';

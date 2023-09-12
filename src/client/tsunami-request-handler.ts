@@ -4,13 +4,22 @@ import {ChainId} from "../enum/chain-id";
 import {AxiosRequestConfig, HttpStatusCode, isAxiosError} from "axios/index";
 import {IAxiosRetryConfig} from "axios-retry";
 import {
+    DecodedTsunamiEvent,
     GetContractCreateQuery,
     GetContractSelfDestructsQuery,
     GetTsunamiCallQuery,
     GetTsunamiEventQuery,
-    TsunamiBlock, TsunamiCall, TsunamiContractCreate, TsunamiContractSelfDestruct,
+    TsunamiBlock,
+    TsunamiCall,
+    TsunamiContractCreate,
+    TsunamiContractSelfDestruct,
     TsunamiDataQueryBoundaries,
-    TsunamiEvent, TsunamiRange, TsunamiTransaction, TsunamiTransactionWithLogs, TsunamiTransfer
+    TsunamiEvent,
+    TsunamiRange,
+    TsunamiTransaction,
+    TsunamiTransactionWithLogs,
+    TsunamiTransfer,
+    DecodedTsunamiCall
 } from "../dto";
 import {TsunamiError} from "./tsunami-error";
 import {GetTsunamiTransfersQuery} from "../dto/get-tsunami-transfers-query";
@@ -140,8 +149,24 @@ export class TsunamiRequestHandler extends HttpClient implements TsunamiClient {
         }
     }
 
+    public async *getDecodedEvents(criteria: GetTsunamiEventQuery, boundaries: TsunamiDataQueryBoundaries, abi: any) {
+        const stream = this.queryTsunami<DecodedTsunamiEvent>('/decode/events', criteria, boundaries, abi);
+
+        for await (const calls of stream) {
+            yield* calls;
+        }
+    }
+
     public async *getCalls(criteria: GetTsunamiCallQuery, boundaries: TsunamiDataQueryBoundaries) {
         const stream = this.queryTsunami<TsunamiCall>('/calls', criteria, boundaries);
+
+        for await (const calls of stream) {
+            yield* calls;
+        }
+    }
+
+    public async *getDecodedCalls(criteria: GetTsunamiCallQuery, boundaries: TsunamiDataQueryBoundaries, abi: any) {
+        const stream = this.queryTsunami<DecodedTsunamiCall>('/decode/calls', criteria, boundaries, abi);
 
         for await (const calls of stream) {
             yield* calls;
@@ -263,11 +288,12 @@ export class TsunamiRequestHandler extends HttpClient implements TsunamiClient {
     }
 
     protected async *queryTsunami<
-        Item extends TsunamiEvent | TsunamiCall | TsunamiBlock | TsunamiTransfer | TsunamiTransaction = any,
+        Item extends TsunamiEvent | TsunamiCall | TsunamiBlock | TsunamiTransfer | TsunamiTransaction | DecodedTsunamiCall | DecodedTsunamiEvent = any,
     >(
         endpoint: string,
         criteria: GetTsunamiEventQuery | Record<string, any>,
         boundaries: TsunamiDataQueryBoundaries,
+        body?: any,
     ): AsyncGenerator<Item[]> {
         let offset: string | undefined;
         let hasMore;
@@ -281,7 +307,7 @@ export class TsunamiRequestHandler extends HttpClient implements TsunamiClient {
                 limit: Math.min(boundaries.batchSize ?? 1000, boundaries.limit ?? 1000, 1000),
             };
 
-            const response = await this.doRequest<Item>(endpoint, params);
+            const response = body===undefined ? await this.doRequest<Item>(endpoint, params) : await this.postRequest<Item>(endpoint, params, body);
 
             if (response.data.items.length > hardLimit - fetched) {
                 yield response.data.items.splice(0, hardLimit - fetched);
@@ -298,10 +324,36 @@ export class TsunamiRequestHandler extends HttpClient implements TsunamiClient {
     }
 
     protected async doRequest<
-        Item extends TsunamiEvent | TsunamiCall | TsunamiBlock | TsunamiTransfer | TsunamiTransaction = any,
+        Item extends TsunamiEvent | TsunamiCall | TsunamiBlock | TsunamiTransfer | TsunamiTransaction | DecodedTsunamiCall | DecodedTsunamiEvent = any,
     >(endpoint: string, params: Record<string, string | number>) {
         const response = await this.instance
             .get<{ range: TsunamiRange; items: Item[] }>(endpoint, {
+                params,
+            })
+            .catch(error => {
+                if (isAxiosError(error)) {
+                    throw new TsunamiError(
+                        error.response?.data?.message ?? REQUEST_FAILED_MESSAGE,
+                        error.response?.status ?? null,
+                        error.response?.data?.error ?? null,
+                        error.cause ?? null,
+                    );
+                }
+                throw new TsunamiError(REQUEST_FAILED_MESSAGE, null, null, error);
+            });
+
+        if (!response?.data?.items) {
+            throw new TsunamiError(MALFORMED_RESPONSE_MESSAGE, null, null);
+        }
+
+        return response;
+    }
+
+    protected async postRequest<
+        Item extends TsunamiEvent | TsunamiCall | TsunamiBlock | TsunamiTransfer | TsunamiTransaction | DecodedTsunamiCall | DecodedTsunamiEvent = any,
+    >(endpoint: string, body: any, params: Record<string, string | number>) {
+        const response = await this.instance
+            .post<{ range: TsunamiRange; items: Item[] }>(endpoint, body, {
                 params,
             })
             .catch(error => {
