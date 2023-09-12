@@ -16,6 +16,7 @@ import {
     NftCollectionMetadata
 } from "../dto/nft-datalake";
 import {NftDataQueryBoundaries} from "../dto/nft-datalake";
+import {NFT_BASE_URL} from "./urls";
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed NFT DL response';
 const REQUEST_FAILED_MESSAGE = 'NFT DL request failed';

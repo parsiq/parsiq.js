@@ -1,7 +1,7 @@
 import {HttpClient} from "./http-client";
 import {TsunamiClient} from "./tsunami-client-interface";
 import {ChainId} from "../enum/chain-id";
-import {AxiosRequestConfig, HttpStatusCode, isAxiosError} from "axios/index";
+import {AxiosRequestConfig, HttpStatusCode, isAxiosError} from "axios";
 import {IAxiosRetryConfig} from "axios-retry";
 import {
     DecodedTsunamiEvent,
@@ -25,6 +25,7 @@ import {TsunamiError} from "./tsunami-error";
 import {GetTsunamiTransfersQuery} from "../dto/get-tsunami-transfers-query";
 import {GetWalletTransactionsQuery} from "../dto/get-wallet-transactions-query";
 import {convertForRequest} from "./convertor";
+import {TSUNAMI_BASE_URL} from "./urls";
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed Tsunami response';
 const REQUEST_FAILED_MESSAGE = 'Tsunami request failed';
@@ -45,6 +46,7 @@ export class TsunamiRequestHandler extends HttpClient implements TsunamiClient {
         },
     ) {
         const { axiosConfig = {}, retryConfig = {} } = config;
+        console.log(baseUrl(chain));
         super(baseUrl(chain), apiKey, axiosConfig, retryConfig);
     }
 
@@ -121,10 +123,12 @@ export class TsunamiRequestHandler extends HttpClient implements TsunamiClient {
         try {
             const response = await this.instance.get<TsunamiBlock>('/blocks/latest');
             if (!response?.data) {
+                console.log('here')
                 throw new Error(MALFORMED_RESPONSE_MESSAGE);
             }
             return response.data;
         } catch (error) {
+            console.log('or here')
             if (isAxiosError(error)) {
                 throw new TsunamiError(
                     error.response?.data?.message ?? REQUEST_FAILED_MESSAGE,
