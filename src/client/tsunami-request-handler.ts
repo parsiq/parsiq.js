@@ -1,5 +1,4 @@
 import {HttpClient} from "./http-client";
-import {ChainId} from "../enum/chain-id";
 import {AxiosRequestConfig, HttpStatusCode, isAxiosError} from "axios";
 import {IAxiosRetryConfig} from "axios-retry";
 import {
@@ -23,6 +22,7 @@ import {TsunamiError} from "./tsunami-error";
 import {GetTsunamiTransfersQuery} from "../dto/get-tsunami-transfers-query";
 import {GetWalletTransactionsQuery} from "../dto/get-wallet-transactions-query";
 import {TSUNAMI_BASE_URL} from "./urls";
+import {Parsiq} from "./parsiq-client";
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed Tsunami response';
 const REQUEST_FAILED_MESSAGE = 'Tsunami request failed';
@@ -30,7 +30,7 @@ const REQUEST_FAILED_MESSAGE = 'Tsunami request failed';
 export class TsunamiRequestHandler extends HttpClient {
     constructor(
         apiKey: string,
-        chain: ChainId,
+        chain: Parsiq.ChainId,
         config: { axiosConfig?: AxiosRequestConfig; retryConfig?: IAxiosRetryConfig } = {
             axiosConfig: {},
             retryConfig: {},

@@ -1,15 +1,15 @@
 import axios, {AxiosInstance, AxiosRequestConfig, isAxiosError} from 'axios';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
-import {ChainId} from "../enum/chain-id";
 import {TsunamiError} from "./tsunami-error";
 import {convertForRequest} from "./convertor";
 import {BasicRangeParams} from "../dto/common";
+import {Parsiq} from "./parsiq-client";
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed server response';
 const REQUEST_FAILED_MESSAGE = 'Server request failed';
 
-const baseUrl = (instanceUrl: string, chain: ChainId) => {
-  if (!Object.values(ChainId).includes(chain)) {
+const baseUrl = (instanceUrl: string, chain: Parsiq.ChainId) => {
+  if (!Object.values(Parsiq.ChainId).includes(chain)) {
     throw new Error('Invalid chain provided');
   }
   return instanceUrl + `${chain}/v1/`;
@@ -18,7 +18,7 @@ export abstract class HttpClient {
   protected readonly instance: AxiosInstance;
   protected readonly instanceUrl: string;
 
-  protected constructor(instanceUrl: string, chainId: ChainId, apiKey: string, config: AxiosRequestConfig, retry: IAxiosRetryConfig) {
+  protected constructor(instanceUrl: string, chainId: Parsiq.ChainId, apiKey: string, config: AxiosRequestConfig, retry: IAxiosRetryConfig) {
     this.instance = axios.create({
       ...config,
       baseURL: baseUrl(instanceUrl, chainId),
@@ -28,7 +28,7 @@ export abstract class HttpClient {
     axiosRetry(this.instance, retry);
   }
 
-  public setChain(chain: ChainId) {
+  public setChain(chain: Parsiq.ChainId) {
     this.instance.defaults.baseURL = baseUrl(this.instanceUrl, chain);
   }
 

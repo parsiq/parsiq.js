@@ -1,9 +1,9 @@
-import {ParsiqClient} from "../client";
-import {ChainId} from "../enum/chain-id";
+import {Parsiq}from "../client";
 import {TsunamiBlock} from "../dto";
+import {YOUR_API_KEY} from "./api-key";
 
 async function runBlocks() {
-    const client = new ParsiqClient('', ChainId.ETH_MAINNET);
+    const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
     const latestBlock = await client.blocks.getLatest()
     console.log(`Latest block - block hash: ${latestBlock.hash}, number ${latestBlock.number} and timestamp ${latestBlock.timestamp}`);

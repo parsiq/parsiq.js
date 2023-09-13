@@ -1,5 +1,4 @@
 import {HttpClient} from "./http-client";
-import {ChainId} from "../enum/chain-id";
 import {AxiosRequestConfig} from "axios";
 import {IAxiosRetryConfig} from "axios-retry";
 import {
@@ -14,13 +13,14 @@ import {
 } from "../dto/nft-datalake";
 import {NftDataQueryBoundaries} from "../dto/nft-datalake";
 import {NFT_BASE_URL} from "./urls";
+import {Parsiq} from "./parsiq-client";
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed NFT DL response';
 
 export class NftRequestHandler extends HttpClient {
     constructor(
         apiKey: string,
-        chain: ChainId,
+        chain: Parsiq.ChainId,
         config: { axiosConfig?: AxiosRequestConfig; retryConfig?: IAxiosRetryConfig } = {
             axiosConfig: {},
             retryConfig: {},
