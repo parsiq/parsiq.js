@@ -33,6 +33,12 @@ export class ParsiqClient {
     this.balancesRequestHandler = new BalancesRequestHandler(apiKey, chain, config);
   }
 
+  public setChain(chainId: ChainId) {
+    this.tsunamiRequestHandler.setChain(chainId);
+    this.nftRequestHandler.setChain(chainId);
+    this.balancesRequestHandler.setChain(chainId);
+  }
+
   public readonly blocks = {
     getByBlockNumber: (blockNumberStart: number, blockNumberEnd: number) => {
       return this.tsunamiRequestHandler.getBlocks(blockNumberStart, blockNumberEnd);
