@@ -1,0 +1,21 @@
+import {Parsiq} from "../client";
+import {YOUR_API_KEY} from "./api-key";
+import {DecodedTsunamiEvent, TsunamiEvent} from "../dto";
+import {ABI} from "./abi-example";
+
+
+async function runLogs() {
+    const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
+
+    const log = (await client.logs.getByBlockNumber(15724832, 15724832, {topic_0: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef']}, undefined, {limit: 1})
+        .next()).value as TsunamiEvent;
+    console.log(`Tsunami log - with id: ${log.id}, block hash: ${log.block_hash}, block number ${log.block_number} and topic 0: ${log.topic_0}`);
+
+    const decodedLog = (await client.logs.getByBlockNumber(15724832, 15724832,
+        {topic_0: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef','0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925','0x4c209b5fc8ad50758f13e2e1088ba56a560dff690a1c6fef26394f4c03821c4f']},
+        ABI, {limit: 1})
+        .next()).value as DecodedTsunamiEvent;
+    console.log(`Decoded part of the log - ${JSON.stringify(decodedLog.decoded)}`);
+}
+
+runLogs();

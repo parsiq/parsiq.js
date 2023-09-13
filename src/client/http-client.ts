@@ -52,7 +52,7 @@ export abstract class HttpClient {
         limit: Math.min(boundaries.batchSize ?? 1000, boundaries.limit ?? 1000, 1000),
       };
 
-      const response = body===undefined ? await this.doRequest<Item>(endpoint, params) : await this.postRequest<Item>(endpoint, params, body);
+      const response = body===undefined ? await this.doRequest<Item>(endpoint, params) : await this.postRequest<Item>(endpoint, body, params);
 
       if (response.data.items.length > hardLimit - fetched) {
         yield response.data.items.splice(0, hardLimit - fetched);
