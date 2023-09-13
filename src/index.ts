@@ -8,3 +8,4 @@ export * from './dto/nft-datalake';
 export * from './dto/ft-datalake';
 export * from './dto/dex-datalake';
 export * from './dto/common';
+export * from './utils';

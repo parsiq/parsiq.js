@@ -16,6 +16,9 @@ async function runBlocks() {
 
     const blockByHash = await client.blocks.getByHash(blockByBlockNumber.hash);
     console.log(`Block by hash - block hash: ${blockByHash.hash}, number ${blockByHash.number} and timestamp ${blockByHash.timestamp}`)
+
+    const blockByBlockNumberWithOffset = (await client.blocks.getByBlockNumber(0, 1, {offset: blockByBlockNumber.hash}).next()).value as TsunamiBlock;
+    console.log(`Block by block number through offset - block hash: ${blockByBlockNumberWithOffset.hash}, number ${blockByBlockNumberWithOffset.number} and timestamp ${blockByBlockNumberWithOffset.timestamp}`)
 }
 
 runBlocks();

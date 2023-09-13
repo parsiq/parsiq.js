@@ -23,6 +23,7 @@ import {GetTsunamiTransfersQuery} from "../dto/get-tsunami-transfers-query";
 import {GetWalletTransactionsQuery} from "../dto/get-wallet-transactions-query";
 import {TSUNAMI_BASE_URL} from "./urls";
 import {Parsiq} from "./parsiq-client";
+import {RangeOptions} from "../dto/common";
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed Tsunami response';
 const REQUEST_FAILED_MESSAGE = 'Tsunami request failed';
@@ -38,12 +39,6 @@ export class TsunamiRequestHandler extends HttpClient {
     ) {
         const { axiosConfig = {}, retryConfig = {} } = config;
         super(TSUNAMI_BASE_URL, chain, apiKey, axiosConfig, retryConfig);
-    }
-
-    public async getBlockByNumber(blockNumber: number) {
-        const block = this.getBlocks(blockNumber, blockNumber);
-
-        return (await block.next()).value as TsunamiBlock;
     }
 
     public async getBlockByHash(blockHash: string): Promise<TsunamiBlock> {
@@ -77,11 +72,13 @@ export class TsunamiRequestHandler extends HttpClient {
     async *getBlocksByTimestamp(
         startBlockTimestamp: number,
         endBlockTimestamp: number,
+        rangeOptions?: RangeOptions
     ): AsyncGenerator<TsunamiBlock, void, undefined> {
         const iterator = this.query<TsunamiBlock>(
             '/blocks',
             {},
             {
+                ...rangeOptions,
                 timestamp_start: startBlockTimestamp,
                 timestamp_end: endBlockTimestamp,
             },
@@ -91,11 +88,12 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    public async *getBlocks(start: number, end: number) {
+    public async *getBlocks(start: number, end: number, rangeOptions?: RangeOptions) {
         const iterator = this.query<TsunamiBlock>(
             '/blocks',
             {},
             {
+                ...rangeOptions,
                 block_number_start: start,
                 block_number_end: end,
             },
