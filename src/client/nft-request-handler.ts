@@ -4,16 +4,15 @@ import {IAxiosRetryConfig} from "axios-retry";
 import {
     NftAddressInventoryHistoryItem,
     NftAddressInventoryItem,
-    AdditionalNftDataQuery,
-    BasicNftItemDataQuery,
+    NftSupplementalDataCriteria,
+    NftContractCriteria,
     NftTokenTransferItem,
     NftCollectionTokenHolder,
-    NftHistoryItem,
-    NftCollectionMetadata
+    NftContractMetadata, NftTokenMetadata
 } from "../dto/nft-datalake";
-import {NftDataQueryBoundaries} from "../dto/nft-datalake";
 import {NFT_BASE_URL} from "./urls";
 import {Parsiq} from "./parsiq-client";
+import {RangeOptions} from "../dto/common";
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed NFT DL response';
 
@@ -30,7 +29,7 @@ export class NftRequestHandler extends HttpClient {
         super(NFT_BASE_URL, chain, apiKey, axiosConfig, retryConfig);
     }
 
-    public async *getAddressNFTs(address: string, criteria: BasicNftItemDataQuery, boundaries: NftDataQueryBoundaries): AsyncGenerator<NftAddressInventoryItem, void, undefined> {
+    public async *getAddressNFTs(address: string, criteria: NftContractCriteria, boundaries: RangeOptions): AsyncGenerator<NftAddressInventoryItem, void, undefined> {
         const iterator = this.query<NftAddressInventoryItem>(
             `/${address}/inventory`,
             criteria,
@@ -41,7 +40,7 @@ export class NftRequestHandler extends HttpClient {
         }
     }
 
-    public async *getAddressHistory(address: string, criteria: BasicNftItemDataQuery, boundaries: NftDataQueryBoundaries): AsyncGenerator<NftAddressInventoryHistoryItem, void, undefined> {
+    public async *getAddressHistory(address: string, criteria: NftContractCriteria, boundaries: RangeOptions): AsyncGenerator<NftAddressInventoryHistoryItem, void, undefined> {
         const iterator = this.query<NftAddressInventoryHistoryItem>(
             `/${address}/history`,
             criteria,
@@ -52,7 +51,7 @@ export class NftRequestHandler extends HttpClient {
         }
     }
 
-    public async *getTokenHistory(tokenId: string, contract: string, criteria: AdditionalNftDataQuery, boundaries: NftDataQueryBoundaries): AsyncGenerator<NftCollectionTokenHolder, void, undefined> {
+    public async *getTokenHistory(tokenId: string, contract: string, criteria: NftSupplementalDataCriteria, boundaries: RangeOptions): AsyncGenerator<NftCollectionTokenHolder, void, undefined> {
         const iterator = this.query<NftCollectionTokenHolder>(
             `/${contract}/${tokenId}/history`,
             criteria,
@@ -63,7 +62,7 @@ export class NftRequestHandler extends HttpClient {
         }
     }
 
-    public async *getCollectionHolders(contract: string, criteria: AdditionalNftDataQuery, boundaries: NftDataQueryBoundaries): AsyncGenerator<NftTokenTransferItem, void, undefined> {
+    public async *getCollectionHolders(contract: string, criteria: NftSupplementalDataCriteria, boundaries: RangeOptions): AsyncGenerator<NftTokenTransferItem, void, undefined> {
         const iterator = this.query<NftTokenTransferItem>(
             `/${contract}/owner`,
             criteria,
@@ -74,9 +73,9 @@ export class NftRequestHandler extends HttpClient {
         }
     }
 
-    public async getTokenMetadata(tokenId: string, contract: string): Promise<Omit<NftHistoryItem, 'id'>> {
+    public async getTokenMetadata(tokenId: string, contract: string): Promise<NftTokenMetadata> {
         try {
-            const response = await this.instance.get<Omit<NftHistoryItem, 'id'>>(`/${contract}/${tokenId}/metadata`);
+            const response = await this.instance.get<NftTokenMetadata>(`/${contract}/${tokenId}/metadata`);
             if (!response?.data) {
                 throw new Error(MALFORMED_RESPONSE_MESSAGE);
             }
@@ -87,9 +86,9 @@ export class NftRequestHandler extends HttpClient {
         }
     }
 
-    public async getContractMetadata(contract: string): Promise<NftCollectionMetadata> {
+    public async getContractMetadata(contract: string): Promise<NftContractMetadata> {
         try {
-            const response = await this.instance.get<NftCollectionMetadata>(`/${contract}/contract-data`);
+            const response = await this.instance.get<NftContractMetadata>(`/${contract}/contract-data`);
             if (!response?.data) {
                 throw new Error(MALFORMED_RESPONSE_MESSAGE);
             }

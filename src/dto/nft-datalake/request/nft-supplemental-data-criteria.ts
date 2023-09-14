@@ -1,4 +1,4 @@
-export interface AdditionalNftDataQuery {
+export interface NftSupplementalDataCriteria {
     metadata?: boolean;
     sale_price?: boolean;
 }

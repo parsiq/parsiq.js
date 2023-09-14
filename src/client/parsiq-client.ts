@@ -11,7 +11,7 @@ import {LATEST_TAG} from "../constants";
 import {TsunamiRequestHandler} from "./tsunami-request-handler";
 import {TsunamiTransfersCriteria} from "../dto/tsunami/request/tsunami-transfers-criteria";
 import {NftRequestHandler} from "./nft-request-handler";
-import {AdditionalNftDataQuery, BasicNftItemDataQuery} from "../dto/nft-datalake";
+import {NftSupplementalDataCriteria, NftContractCriteria} from "../dto/nft-datalake";
 import {BalancesRequestHandler} from "./balances-request-handler";
 import {RangeOptions} from "../dto/common";
 import {Exact} from "../utils";
@@ -264,19 +264,19 @@ export namespace Parsiq {
     }
 
     public readonly nft = {
-      getByAddress: (address: string, criteria: BasicNftItemDataQuery, rangeOptions?: RangeOptions) => {
+      getByAddress: (address: string, criteria: NftContractCriteria, rangeOptions?: RangeOptions) => {
         return this.nftRequestHandler.getAddressNFTs(address, criteria, {...rangeOptions});
       },
 
-      getAddressHistory: (address: string, criteria: BasicNftItemDataQuery, rangeOptions?: RangeOptions) => {
+      getAddressHistory: (address: string, criteria: NftContractCriteria, rangeOptions?: RangeOptions) => {
         return this.nftRequestHandler.getAddressHistory(address, criteria, {...rangeOptions});
       },
 
-      getTokenHistory: (tokenId: string, contract: string, criteria: AdditionalNftDataQuery, rangeOptions?: RangeOptions) => {
+      getTokenHistory: (tokenId: string, contract: string, criteria: NftSupplementalDataCriteria, rangeOptions?: RangeOptions) => {
         return this.nftRequestHandler.getTokenHistory(tokenId, contract, criteria, {...rangeOptions});
       },
 
-      getCollectionHolders: (contract: string, criteria: AdditionalNftDataQuery, rangeOptions?: RangeOptions) => {
+      getCollectionHolders: (contract: string, criteria: NftSupplementalDataCriteria, rangeOptions?: RangeOptions) => {
         return this.nftRequestHandler.getCollectionHolders(contract, criteria, {...rangeOptions});
       },
 
