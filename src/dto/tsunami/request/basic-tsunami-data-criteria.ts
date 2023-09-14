@@ -1,4 +1,4 @@
-export interface BasicTsunamiDataQuery {
+export interface BasicTsunamiDataCriteria {
   contract?: string[];
   origin?: string;
 }

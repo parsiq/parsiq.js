@@ -1,6 +1,6 @@
-import { OpCode } from '../../enum/op-code';
+import { OpCode } from '../../../enum/op-code';
 
-export interface ContractCreateDestructBase {
+export interface TsunamiContractCreationDestructionBase {
   id: string;
   contract: string;
   caller: string;

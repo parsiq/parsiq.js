@@ -10,6 +10,6 @@ export interface TsunamiTransaction {
   data?: object;
 }
 
-export interface TsunamiTransactionWithLogs extends TsunamiTransaction {
+export interface TsunamiTransactionInternals extends TsunamiTransaction {
   logs?: readonly TransactionLog[];
 }
