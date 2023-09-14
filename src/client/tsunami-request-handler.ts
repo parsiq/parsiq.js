@@ -88,7 +88,7 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    public async *getBlocks(start: number, end: number, rangeOptions?: RangeOptions) {
+    public async *getBlocksByNumber(start: number, end: number, rangeOptions?: RangeOptions) {
         const iterator = this.query<TsunamiBlock>(
             '/blocks',
             {},
@@ -115,19 +115,15 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    public async *getEventsBatch(criteria: GetTsunamiEventQuery, boundaries: TsunamiDataQueryBoundaries) {
-        yield* this.query<TsunamiEvent>('/events', criteria, boundaries);
-    }
-
-    public async *getEvents(criteria: GetTsunamiEventQuery, boundaries: TsunamiDataQueryBoundaries) {
-        const stream = this.getEventsBatch(criteria, boundaries);
+    public async *getLogs(criteria: GetTsunamiEventQuery, boundaries: TsunamiDataQueryBoundaries) {
+        const stream = this.query<TsunamiEvent>('/events', criteria, boundaries);
 
         for await (const events of stream) {
             yield* events;
         }
     }
 
-    public async *getDecodedEvents(criteria: GetTsunamiEventQuery, boundaries: TsunamiDataQueryBoundaries, abi: any) {
+    public async *getDecodedLogs(criteria: GetTsunamiEventQuery, boundaries: TsunamiDataQueryBoundaries, abi: any) {
         const stream = this.query<DecodedTsunamiEvent>('/decode/events', criteria, boundaries, abi);
 
         for await (const calls of stream) {
@@ -135,7 +131,7 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    public async *getCalls(criteria: GetTsunamiCallQuery, boundaries: TsunamiDataQueryBoundaries) {
+    public async *getInternalTransactions(criteria: GetTsunamiCallQuery, boundaries: TsunamiDataQueryBoundaries) {
         const stream = this.query<TsunamiCall>('/calls', criteria, boundaries);
 
         for await (const calls of stream) {
@@ -143,7 +139,7 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    public async *getDecodedCalls(criteria: GetTsunamiCallQuery, boundaries: TsunamiDataQueryBoundaries, abi: any) {
+    public async *getDecodedInternalTransactions(criteria: GetTsunamiCallQuery, boundaries: TsunamiDataQueryBoundaries, abi: any) {
         const stream = this.query<DecodedTsunamiCall>('/decode/calls', criteria, boundaries, abi);
 
         for await (const calls of stream) {
@@ -179,7 +175,7 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    async getTransactionWithLogs(transactionHash: string): Promise<TsunamiTransactionWithLogs> {
+    async getTransactionInternals(transactionHash: string): Promise<TsunamiTransactionWithLogs> {
         try {
             const response = await this.instance.get<TsunamiTransaction>(`/txs/${transactionHash}/logs`);
             if (!response?.data) {
@@ -219,7 +215,7 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    async *getTransfers(
+    async *getWalletTransfers(
         address: string,
         criteria: GetTsunamiTransfersQuery,
         boundaries: TsunamiDataQueryBoundaries,
@@ -231,7 +227,7 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    async *getWalletTransactions(
+    async *getTransactions(
         address: string,
         criteria: GetWalletTransactionsQuery,
         boundaries: TsunamiDataQueryBoundaries,
@@ -243,7 +239,7 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    async *getContractSelfDestructs(
+    async *getContractSelfDestructions(
         criteria: GetContractSelfDestructsQuery,
         boundaries: TsunamiDataQueryBoundaries,
     ): AsyncGenerator<TsunamiContractSelfDestruct, void, undefined> {
@@ -254,7 +250,7 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    async *getContractCreates(
+    async *getContractCreations(
         criteria: GetContractCreateQuery,
         boundaries: TsunamiDataQueryBoundaries,
     ): AsyncGenerator<TsunamiContractSelfDestruct, void, undefined> {

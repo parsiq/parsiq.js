@@ -13,6 +13,9 @@ export async function runBalances() {
         '0x362bc847A3a9637d3af6624EeC853618a43ed7D2'
     ).next()).value;
     console.log(`Balance info by contract - ${JSON.stringify(balanceByContract)}`, '\n');
+
+    const contractMetadata = await client.balances.getContractMetadata('0x362bc847A3a9637d3af6624EeC853618a43ed7D2');
+    console.log(`Contract metadata - ${JSON.stringify(contractMetadata)}`, '\n');
 }
 
 runBalances();
