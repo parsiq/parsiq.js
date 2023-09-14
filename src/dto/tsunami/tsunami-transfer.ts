@@ -1,4 +1,4 @@
-import { AssetType } from '../enum/asset-type';
+import { AssetType } from '../../enum/asset-type';
 import { TsunamiLog } from './tsunami-log';
 
 export interface TsunamiTransfer extends TsunamiLog {

@@ -1,8 +1,7 @@
-import {Parsiq}from "../client";
-import {TsunamiBlock} from "../dto";
+import {Parsiq, TsunamiBlock}from "../src";
 import {YOUR_API_KEY} from "./api-key";
 
-async function runBlocks() {
+export async function runBlocks() {
     const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
     const latestBlock = await client.blocks.getLatest()

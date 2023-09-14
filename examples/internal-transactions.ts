@@ -1,10 +1,8 @@
-import {Parsiq} from "../client";
+import {Parsiq, DecodedTsunamiCall, TsunamiCall} from "../src";
 import {YOUR_API_KEY} from "./api-key";
-import {DecodedTsunamiCall, TsunamiCall} from "../dto";
 import {ABI} from "./abi-example";
 
-
-async function runInternalTransactions() {
+export async function runInternalTransactions() {
     const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
     const internalCall = (await client.internalTransactions.getByBlockNumber(

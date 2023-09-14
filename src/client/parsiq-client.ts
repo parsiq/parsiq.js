@@ -3,13 +3,13 @@ import {
   GetContractSelfDestructsQuery,
   GetTsunamiCallQuery,
   GetTsunamiEventQuery,
-} from '../dto';
+} from '../dto/tsunami';
 import {AxiosRequestConfig} from 'axios';
 import {IAxiosRetryConfig} from 'axios-retry';
-import {GetWalletTransactionsQuery} from '../dto/get-wallet-transactions-query';
+import {GetWalletTransactionsQuery} from '../dto/tsunami/get-wallet-transactions-query';
 import {LATEST_TAG} from "../constants";
 import {TsunamiRequestHandler} from "./tsunami-request-handler";
-import {GetTsunamiTransfersQuery} from "../dto/get-tsunami-transfers-query";
+import {GetTsunamiTransfersQuery} from "../dto/tsunami/get-tsunami-transfers-query";
 import {NftRequestHandler} from "./nft-request-handler";
 import {AdditionalNftDataQuery, BasicNftItemDataQuery} from "../dto/nft-datalake";
 import {BalancesRequestHandler} from "./balances-request-handler";

@@ -1,4 +1,4 @@
-import { OpCode } from '../enum/op-code';
+import { OpCode } from '../../enum/op-code';
 
 export interface TransactionLog {
   id: string;

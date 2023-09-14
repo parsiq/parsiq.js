@@ -1,5 +1,5 @@
-import { TransferDirection } from '../enum/transfer-direction';
-import { AssetType } from '../enum/asset-type';
+import { TransferDirection } from '../../enum/transfer-direction';
+import { AssetType } from '../../enum/asset-type';
 
 export interface GetTsunamiTransfersQuery {
   asset_type: AssetType[];

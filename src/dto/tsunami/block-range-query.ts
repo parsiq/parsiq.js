@@ -1,4 +1,4 @@
-import { LATEST_TAG } from '../constants';
+import { LATEST_TAG } from '../../constants';
 
 export interface BlockRangeQuery {
   block_number_start?: number;

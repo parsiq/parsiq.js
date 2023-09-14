@@ -1,13 +1,14 @@
-import {Parsiq} from "../client";
-import {YOUR_API_KEY} from "./api-key";
 import {
+    Parsiq,
     NftAddressInventoryHistoryItem,
     NftAddressInventoryItem,
     NftCollectionTokenHolder,
     NftTokenTransferItem
-} from "../dto/nft-datalake";
+} from "../src";
+import {YOUR_API_KEY} from "./api-key";
 
-async function runNFTs() {
+
+export async function runNFTs() {
     const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
     const nftByAddress = (await client.nft.getByAddress(

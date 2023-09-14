@@ -1,4 +1,4 @@
-import { OpCode } from '../enum/op-code';
+import { OpCode } from '../../enum/op-code';
 import { TsunamiLog } from './tsunami-log';
 
 export interface TsunamiEventBase extends TsunamiLog {

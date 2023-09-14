@@ -1,5 +1,5 @@
 import { BasicTsunamiDataQuery } from './basic-tsunami-data-query';
-import { OpCode } from '../enum/op-code';
+import { OpCode } from '../../enum/op-code';
 
 export interface GetTsunamiEventQuery extends BasicTsunamiDataQuery {
   topic_0?: string[];

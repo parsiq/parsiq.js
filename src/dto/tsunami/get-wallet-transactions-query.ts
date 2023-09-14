@@ -1,4 +1,4 @@
-import { TransferDirection } from '../enum/transfer-direction';
+import { TransferDirection } from '../../enum/transfer-direction';
 
 export interface GetWalletTransactionsQuery {
   include_logs?: boolean;

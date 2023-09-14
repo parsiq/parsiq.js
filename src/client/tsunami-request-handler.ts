@@ -17,10 +17,10 @@ import {
     TsunamiTransactionWithLogs,
     TsunamiTransfer,
     DecodedTsunamiCall
-} from "../dto";
+} from "../dto/tsunami";
 import {TsunamiError} from "./tsunami-error";
-import {GetTsunamiTransfersQuery} from "../dto/get-tsunami-transfers-query";
-import {GetWalletTransactionsQuery} from "../dto/get-wallet-transactions-query";
+import {GetTsunamiTransfersQuery} from "../dto/tsunami/get-tsunami-transfers-query";
+import {GetWalletTransactionsQuery} from "../dto/tsunami/get-wallet-transactions-query";
 import {TSUNAMI_BASE_URL} from "./urls";
 import {Parsiq} from "./parsiq-client";
 import {RangeOptions} from "../dto/common";

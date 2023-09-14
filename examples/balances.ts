@@ -1,7 +1,7 @@
 import {YOUR_API_KEY} from "./api-key";
-import {Parsiq} from "../client";
+import {Parsiq} from "../src";
 
-async function runBalances() {
+export async function runBalances() {
     const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
     const balanceByAddress = (await client.balances.getByAddress(

@@ -1,10 +1,8 @@
-import {Parsiq} from "../client";
+import {Parsiq, DecodedTsunamiEvent, TsunamiEvent} from "../src";
 import {YOUR_API_KEY} from "./api-key";
-import {DecodedTsunamiEvent, TsunamiEvent} from "../dto";
 import {ABI} from "./abi-example";
 
-
-async function runLogs() {
+export async function runLogs() {
     const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
     const log = (await client.logs.getByBlockNumber(

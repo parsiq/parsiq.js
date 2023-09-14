@@ -1,4 +1,4 @@
-export * from './dto';
+export * from './dto/tsunami';
 export * from './enum/op-code';
 export * from './enum/transfer-direction';
 export * from './enum/asset-type';

@@ -1,7 +1,7 @@
-import {Parsiq} from "../client";
+import {Parsiq} from "../src";
 import {YOUR_API_KEY} from "./api-key";
 
-async function runContracts() {
+export async function runContracts() {
     const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
     const creation = (await client.contracts.creations.getByBlockHash(

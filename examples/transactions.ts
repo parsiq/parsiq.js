@@ -1,8 +1,7 @@
-import {Parsiq} from "../client";
+import {Parsiq, TsunamiTransaction} from "../src";
 import {YOUR_API_KEY} from "./api-key";
-import {TsunamiTransaction} from "../dto";
 
-async function runTransactions() {
+export async function runTransactions() {
     const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
     const transaction = (await client.transactions.byAddress.getByBlockNumber(
