@@ -6,19 +6,29 @@ async function runBlocks() {
     const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
     const latestBlock = await client.blocks.getLatest()
-    console.log(`Latest block - block hash: ${latestBlock.hash}, number ${latestBlock.number} and timestamp ${latestBlock.timestamp}`);
+    console.log(`Latest block - ${JSON.stringify(latestBlock)}`, '\n');
 
-    const blockByBlockNumber = (await client.blocks.getByBlockNumber(0, 0).next()).value as TsunamiBlock;
-    console.log(`Block by number - block hash: ${blockByBlockNumber.hash}, number ${blockByBlockNumber.number} and timestamp ${blockByBlockNumber.timestamp}`)
+    const blockByBlockNumber = (await client.blocks.getByBlockNumber(
+        0,
+        0
+    ).next()).value as TsunamiBlock;
+    console.log(`Block by number - ${JSON.stringify(blockByBlockNumber)}`, '\n')
 
-    const blockByTimestamp = (await client.blocks.getByTimestamp(latestBlock.timestamp!, latestBlock.timestamp!).next()).value as TsunamiBlock;
-    console.log(`Block by timestamp - block hash: ${blockByTimestamp.hash}, number ${blockByTimestamp.number} and timestamp ${blockByTimestamp.timestamp}`)
+    const blockByTimestamp = (await client.blocks.getByTimestamp(
+        latestBlock.timestamp!,
+        latestBlock.timestamp!
+    ).next()).value as TsunamiBlock;
+    console.log(`Block by timestamp - ${JSON.stringify(blockByTimestamp)}`, '\n')
 
     const blockByHash = await client.blocks.getByHash(blockByBlockNumber.hash);
-    console.log(`Block by hash - block hash: ${blockByHash.hash}, number ${blockByHash.number} and timestamp ${blockByHash.timestamp}`)
+    console.log(`Block by hash - ${JSON.stringify(blockByHash)}`, '\n')
 
-    const blockByBlockNumberWithOffset = (await client.blocks.getByBlockNumber(0, 1, {offset: blockByBlockNumber.hash}).next()).value as TsunamiBlock;
-    console.log(`Block by block number through offset - block hash: ${blockByBlockNumberWithOffset.hash}, number ${blockByBlockNumberWithOffset.number} and timestamp ${blockByBlockNumberWithOffset.timestamp}`)
+    const blockByBlockNumberWithOffset = (await client.blocks.getByBlockNumber(
+        0,
+        1,
+        {offset: blockByBlockNumber.hash}
+    ).next()).value as TsunamiBlock;
+    console.log(`Block by block number through offset - ${JSON.stringify(blockByBlockNumberWithOffset)}`, '\n')
 }
 
 runBlocks();

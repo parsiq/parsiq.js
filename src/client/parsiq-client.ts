@@ -63,7 +63,6 @@ export namespace Parsiq {
 
     public readonly blocks = {
       getByBlockNumber: (blockNumberStart: number, blockNumberEnd: number, rangeOptions?: Exact<RangeOptions>) => {
-        console.log(rangeOptions);
         return this.tsunamiRequestHandler.getBlocks(blockNumberStart, blockNumberEnd, rangeOptions);
       },
 
@@ -175,7 +174,7 @@ export namespace Parsiq {
         return this.tsunamiRequestHandler.getTransaction(transactionHash);
       },
 
-      getTransactionLogs: (transactionHash: string) => {
+      getTransactionInternals: (transactionHash: string) => {
         return this.tsunamiRequestHandler.getTransactionWithLogs(transactionHash);
       },
 
@@ -244,22 +243,22 @@ export namespace Parsiq {
         },
       },
       token: {
-        getByBlockRange: (address: string, blockNumberStart: number, blockNumberEnd: number | typeof LATEST_TAG, criteria: GetTsunamiTransfersQuery, rangeOptions?: RangeOptions) => {
-          return this.tsunamiRequestHandler.getContractTransfers(address, criteria, {...rangeOptions,
+        getByBlockRange: (contract: string, blockNumberStart: number, blockNumberEnd: number | typeof LATEST_TAG, criteria: GetTsunamiTransfersQuery, rangeOptions?: RangeOptions) => {
+          return this.tsunamiRequestHandler.getContractTransfers(contract, criteria, {...rangeOptions,
             block_number_start: blockNumberStart,
             block_number_end: blockNumberEnd
           });
         },
 
-        getByTimestamp: (address: string, timestampStart: number, timestampEnd: number, criteria: GetTsunamiTransfersQuery, rangeOptions?: RangeOptions) => {
-          return this.tsunamiRequestHandler.getContractTransfers(address, criteria, {...rangeOptions,
+        getByTimestamp: (contract: string, timestampStart: number, timestampEnd: number, criteria: GetTsunamiTransfersQuery, rangeOptions?: RangeOptions) => {
+          return this.tsunamiRequestHandler.getContractTransfers(contract, criteria, {...rangeOptions,
             timestamp_start: timestampStart,
             block_number_end: timestampEnd
           });
         },
 
-        getByBlockHash: (address: string, blockHash: string, criteria: GetTsunamiTransfersQuery, rangeOptions?: RangeOptions) => {
-          return this.tsunamiRequestHandler.getContractTransfers(address, criteria, {...rangeOptions, block_hash: blockHash});
+        getByBlockHash: (contract: string, blockHash: string, criteria: GetTsunamiTransfersQuery, rangeOptions?: RangeOptions) => {
+          return this.tsunamiRequestHandler.getContractTransfers(contract, criteria, {...rangeOptions, block_hash: blockHash});
         },
       },
     }
