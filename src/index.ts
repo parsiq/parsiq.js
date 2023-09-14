@@ -5,7 +5,7 @@ export * from './enum/asset-type';
 export * from './constants';
 export * from './client';
 export * from './dto/nft-datalake';
-export * from './dto/ft-datalake';
+export * from './dto/balances-datalake';
 export * from './dto/dex-datalake';
 export * from './dto/common';
 export * from './utils';

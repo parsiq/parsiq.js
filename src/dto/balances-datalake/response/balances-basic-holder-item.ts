@@ -1,4 +1,4 @@
-export interface FtBasicHolderItem {
+export interface BalancesBasicHolderItem {
   id: string;
   seen_at_block_number: number;
   value_raw: string;

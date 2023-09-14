@@ -2,9 +2,9 @@ import {HttpClient} from "./http-client";
 import {AxiosRequestConfig} from "axios";
 import {IAxiosRetryConfig} from "axios-retry";
 import {
-    FtTokenHolderByAddressItem,
-    FtTokenHolderByContractItem, FtTokenInfoItemWithSupplies
-} from "../dto/ft-datalake";
+    BalancesTokenHolderByAddressItem,
+    BalancesTokenHolderByContractItem, BalancesTokenInfoItemWithSupplies
+} from "../dto/balances-datalake";
 import {BALANCES_BASE_URL} from "./urls";
 import {Parsiq} from "./parsiq-client";
 
@@ -23,8 +23,8 @@ export class BalancesRequestHandler extends HttpClient {
         super(BALANCES_BASE_URL, chain, apiKey, axiosConfig, retryConfig);
     }
 
-    public async *getByAddress(address: string): AsyncGenerator<FtTokenHolderByAddressItem, void, undefined> {
-        const iterator = this.query<FtTokenHolderByAddressItem>(
+    public async *getByAddress(address: string): AsyncGenerator<BalancesTokenHolderByAddressItem, void, undefined> {
+        const iterator = this.query<BalancesTokenHolderByAddressItem>(
             `/addresses/${address}/tokens`,
             {},
             {},
@@ -34,8 +34,8 @@ export class BalancesRequestHandler extends HttpClient {
         }
     }
 
-    public async *getByContract(contract: string):AsyncGenerator<FtTokenHolderByContractItem, void, undefined> {
-        const iterator = this.query<FtTokenHolderByContractItem>(
+    public async *getByContract(contract: string):AsyncGenerator<BalancesTokenHolderByContractItem, void, undefined> {
+        const iterator = this.query<BalancesTokenHolderByContractItem>(
             `/tokens/${contract}/holders`,
             {},
             {},
@@ -45,9 +45,9 @@ export class BalancesRequestHandler extends HttpClient {
         }
     }
 
-    public async getContractMetadata(contract: string): Promise<FtTokenInfoItemWithSupplies> {
+    public async getContractMetadata(contract: string): Promise<BalancesTokenInfoItemWithSupplies> {
         try {
-            const response = await this.instance.get<FtTokenInfoItemWithSupplies>(`/tokens/${contract}`);
+            const response = await this.instance.get<BalancesTokenInfoItemWithSupplies>(`/tokens/${contract}`);
             if (!response?.data) {
                 throw new Error(MALFORMED_RESPONSE_MESSAGE);
             }

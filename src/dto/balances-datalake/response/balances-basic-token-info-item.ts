@@ -1,4 +1,4 @@
-export interface FtBasicTokenInfoItem {
+export interface BalancesBasicTokenInfoItem {
   address: string;
   decimals: number | null;
   symbol: string | null;
