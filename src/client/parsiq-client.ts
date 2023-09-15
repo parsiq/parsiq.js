@@ -265,15 +265,15 @@ export namespace Parsiq {
 
     public readonly nft = {
       getByAddress: (address: string, criteria: NftContractCriteria, rangeOptions?: RangeOptions) => {
-        return this.nftRequestHandler.getAddressNFTs(address, criteria, {...rangeOptions});
+        return this.nftRequestHandler.getNftByAddress(address, criteria, {...rangeOptions});
       },
 
       getAddressHistory: (address: string, criteria: NftContractCriteria, rangeOptions?: RangeOptions) => {
-        return this.nftRequestHandler.getAddressHistory(address, criteria, {...rangeOptions});
+        return this.nftRequestHandler.getNftHistoryByAddress(address, criteria, {...rangeOptions});
       },
 
       getTokenHistory: (tokenId: string, contract: string, criteria: NftSupplementalDataCriteria, rangeOptions?: RangeOptions) => {
-        return this.nftRequestHandler.getTokenHistory(tokenId, contract, criteria, {...rangeOptions});
+        return this.nftRequestHandler.getNftHistory(tokenId, contract, criteria, {...rangeOptions});
       },
 
       getCollectionHolders: (contract: string, criteria: NftSupplementalDataCriteria, rangeOptions?: RangeOptions) => {
@@ -281,7 +281,7 @@ export namespace Parsiq {
       },
 
       getMetadata: (tokenId: string, contract: string) => {
-        return this.nftRequestHandler.getTokenMetadata(tokenId, contract);
+        return this.nftRequestHandler.getNftMetadata(tokenId, contract);
       },
 
       getCollectionMetadata: (contract: string) => {

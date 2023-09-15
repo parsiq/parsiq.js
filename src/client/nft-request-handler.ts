@@ -29,7 +29,7 @@ export class NftRequestHandler extends HttpClient {
         super(NFT_BASE_URL, chain, apiKey, axiosConfig, retryConfig);
     }
 
-    public async *getAddressNFTs(address: string, criteria: NftContractCriteria, boundaries: RangeOptions): AsyncGenerator<NftAddressInventoryItem, void, undefined> {
+    public async *getNftByAddress(address: string, criteria: NftContractCriteria, boundaries: RangeOptions): AsyncGenerator<NftAddressInventoryItem, void, undefined> {
         const iterator = this.query<NftAddressInventoryItem>(
             `/${address}/inventory`,
             criteria,
@@ -40,7 +40,7 @@ export class NftRequestHandler extends HttpClient {
         }
     }
 
-    public async *getAddressHistory(address: string, criteria: NftContractCriteria, boundaries: RangeOptions): AsyncGenerator<NftAddressInventoryHistoryItem, void, undefined> {
+    public async *getNftHistoryByAddress(address: string, criteria: NftContractCriteria, boundaries: RangeOptions): AsyncGenerator<NftAddressInventoryHistoryItem, void, undefined> {
         const iterator = this.query<NftAddressInventoryHistoryItem>(
             `/${address}/history`,
             criteria,
@@ -51,7 +51,7 @@ export class NftRequestHandler extends HttpClient {
         }
     }
 
-    public async *getTokenHistory(tokenId: string, contract: string, criteria: NftSupplementalDataCriteria, boundaries: RangeOptions): AsyncGenerator<NftCollectionTokenHolder, void, undefined> {
+    public async *getNftHistory(tokenId: string, contract: string, criteria: NftSupplementalDataCriteria, boundaries: RangeOptions): AsyncGenerator<NftCollectionTokenHolder, void, undefined> {
         const iterator = this.query<NftCollectionTokenHolder>(
             `/${contract}/${tokenId}/history`,
             criteria,
@@ -73,7 +73,7 @@ export class NftRequestHandler extends HttpClient {
         }
     }
 
-    public async getTokenMetadata(tokenId: string, contract: string): Promise<NftTokenMetadata> {
+    public async getNftMetadata(tokenId: string, contract: string): Promise<NftTokenMetadata> {
         try {
             const response = await this.instance.get<NftTokenMetadata>(`/${contract}/${tokenId}/metadata`);
             if (!response?.data) {
