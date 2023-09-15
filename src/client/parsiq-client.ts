@@ -183,41 +183,41 @@ export namespace Parsiq {
     public readonly contracts = {
       creations: {
         getByBlockRange: (blockNumberStart: number, blockNumberEnd: number | typeof LATEST_TAG, criteria: TsunamiContractCreationCriteria, rangeOptions?: RangeOptions) => {
-          return this.tsunamiRequestHandler.getContractCreations(criteria, {...rangeOptions,
+          return this.tsunamiRequestHandler.getContractsCreations(criteria, {...rangeOptions,
             block_number_start: blockNumberStart,
             block_number_end: blockNumberEnd
           });
         },
 
         getByTimestamp: (timestampStart: number, timestampEnd: number, criteria: TsunamiContractCreationCriteria, rangeOptions?: RangeOptions) => {
-          return this.tsunamiRequestHandler.getContractCreations(criteria, {...rangeOptions,
+          return this.tsunamiRequestHandler.getContractsCreations(criteria, {...rangeOptions,
             timestamp_start: timestampStart,
             block_number_end: timestampEnd
           });
         },
 
         getByBlockHash: (blockHash: string, criteria: TsunamiContractCreationCriteria, rangeOptions?: RangeOptions) => {
-          return this.tsunamiRequestHandler.getContractCreations(criteria, {...rangeOptions, block_hash: blockHash});
+          return this.tsunamiRequestHandler.getContractsCreations(criteria, {...rangeOptions, block_hash: blockHash});
         },
       },
 
       selfDestructions: {
         getByBlockRange: (blockNumberStart: number, blockNumberEnd: number | typeof LATEST_TAG, criteria: ContractSelfDestructionsCriteria, rangeOptions?: RangeOptions) => {
-          return this.tsunamiRequestHandler.getContractSelfDestructions(criteria, {...rangeOptions,
+          return this.tsunamiRequestHandler.getContractsSelfDestructions(criteria, {...rangeOptions,
             block_number_start: blockNumberStart,
             block_number_end: blockNumberEnd
           });
         },
 
         getByTimestamp: (timestampStart: number, timestampEnd: number, criteria: ContractSelfDestructionsCriteria, rangeOptions?: RangeOptions) => {
-          return this.tsunamiRequestHandler.getContractSelfDestructions(criteria, {...rangeOptions,
+          return this.tsunamiRequestHandler.getContractsSelfDestructions(criteria, {...rangeOptions,
             timestamp_start: timestampStart,
             block_number_end: timestampEnd
           });
         },
 
         getByBlockHash: (blockHash: string, criteria: ContractSelfDestructionsCriteria, rangeOptions?: RangeOptions) => {
-          return this.tsunamiRequestHandler.getContractSelfDestructions(criteria, {...rangeOptions, block_hash: blockHash});
+          return this.tsunamiRequestHandler.getContractsSelfDestructions(criteria, {...rangeOptions, block_hash: blockHash});
         },
       },
     }
@@ -244,21 +244,21 @@ export namespace Parsiq {
       },
       token: {
         getByBlockRange: (contract: string, blockNumberStart: number, blockNumberEnd: number | typeof LATEST_TAG, criteria: TsunamiTransfersCriteria, rangeOptions?: RangeOptions) => {
-          return this.tsunamiRequestHandler.getContractTransfers(contract, criteria, {...rangeOptions,
+          return this.tsunamiRequestHandler.getTokenTransfers(contract, criteria, {...rangeOptions,
             block_number_start: blockNumberStart,
             block_number_end: blockNumberEnd
           });
         },
 
         getByTimestamp: (contract: string, timestampStart: number, timestampEnd: number, criteria: TsunamiTransfersCriteria, rangeOptions?: RangeOptions) => {
-          return this.tsunamiRequestHandler.getContractTransfers(contract, criteria, {...rangeOptions,
+          return this.tsunamiRequestHandler.getTokenTransfers(contract, criteria, {...rangeOptions,
             timestamp_start: timestampStart,
             block_number_end: timestampEnd
           });
         },
 
         getByBlockHash: (contract: string, blockHash: string, criteria: TsunamiTransfersCriteria, rangeOptions?: RangeOptions) => {
-          return this.tsunamiRequestHandler.getContractTransfers(contract, criteria, {...rangeOptions, block_hash: blockHash});
+          return this.tsunamiRequestHandler.getTokenTransfers(contract, criteria, {...rangeOptions, block_hash: blockHash});
         },
       },
     }
@@ -284,8 +284,8 @@ export namespace Parsiq {
         return this.nftRequestHandler.getTokenMetadata(tokenId, contract);
       },
 
-      getContractMetadata: (contract: string) => {
-        return this.nftRequestHandler.getContractMetadata(contract);
+      getCollectionMetadata: (contract: string) => {
+        return this.nftRequestHandler.getCollectionMetadata(contract);
       },
     }
 

@@ -1,21 +1,21 @@
-# PARSIQ Tsunami API JS client
+# PARSIQ API JS client
 
-Easy access to PARSIQ Tsunami API, using this JS client.
+Easy access to PARSIQ API, using this JS client.
 
 ## Getting Started
 
 Install via npm:
 
 ```
-$ npm i @parsiq/tsunami-client
+$ npm i @parsiq/parsiq.js
 ```
 
 Set credentials and select a chain to query:
 
 ```typescript
-import { ChainId, TsunamiApiClient } from '@parsiq/tsunami-client';
+import { Parsiq } from '@parsiq/parsiq.js';
 
-const tsunami = new TsunamiApiClient(process.env.TSUNAMI_API_KEY, ChainId.ETH_MAINNET);
+const client = new Parsiq.createClient(process.env.TSUNAMI_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 ```
 
 Don't forget to pass `TSUNAMI_API_KEY` environment variable to your script.
@@ -25,25 +25,45 @@ Don't forget to pass `TSUNAMI_API_KEY` environment variable to your script.
 Run requests to Tsunami API:
 
 ```typescript
-console.log((await tsunami.getLatestBlock()).number);
+console.log((await client.blocks.getLatest()).number);
 ```
 
-Fetch events:
+Fetch logs:
 
 ```typescript
-for await (const event of tsunami.getEvents(
-  { contract: ['0x1e2fbe6be9eb39fc894d38be976111f332172d83'] },
-  { block_number_start: 0, block_number_end: 'latest' },
+for await (const log of client.logs.getByBlockNumber(
+    0,
+    'latest',
+    { contract: ['0x1e2fbe6be9eb39fc894d38be976111f332172d83'] },
+    undefined,
+    {limit: 10}
 )) {
-  console.log(event);
+    console.log(log);
 }
+```
+
+Fetch decoded logs:
+
+```typescript
+    const ABI = {
+    //your abi here
+    }
+    
+    const decodedLog = (await client.logs.getByBlockNumber(
+    15724832,
+    15724832,
+    {topic_0: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef','0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925','0x4c209b5fc8ad50758f13e2e1088ba56a560dff690a1c6fef26394f4c03821c4f']},
+    ABI,
+    {limit: 1}
+).next()).value as TsunamiDecodedLog;
+console.log(JSON.stringify(decodedLog));
 ```
 
 Switch to another chain:
 
 ```typescript
-tsunami.setChain(ChainId.AVALANCHE_MAINNET);
-console.log((await tsunami.getLatestBlock()).number);
+client.setChain(ChainId.AVALANCHE_MAINNET);
+console.log((await tsunami.blocks.getLatest()).number);
 ```
 
 ## More documentation

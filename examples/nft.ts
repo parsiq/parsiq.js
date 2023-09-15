@@ -46,7 +46,7 @@ export async function runNFTs() {
     );
     console.log(`NFT metadata - ${JSON.stringify(metadata)}`, '\n');
 
-    const contractMetadata = await client.nft.getContractMetadata('0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D');
+    const contractMetadata = await client.nft.getCollectionMetadata('0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D');
     console.log(`Contract metadata - ${JSON.stringify(contractMetadata)}`, '\n');
 }
 

@@ -7,7 +7,7 @@ export interface NftTokenBaseMetadata {
   is_json?: boolean;
 }
 
-export interface NftContractMetadata {
+export interface NftCollectionMetadata {
   total_supply?: string;
   symbol?: string;
   name?: string;
@@ -17,7 +17,7 @@ export interface NftContractMetadata {
 
 export interface NftTokenMetadata {
   token_id: string;
-  collection: NftContractMetadata;
+  collection: NftCollectionMetadata;
   metadata: NftTokenBaseMetadata | null;
   transfer: NftTransferMetadata;
   sale_price: NftSalePriceData | null;

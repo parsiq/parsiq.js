@@ -203,7 +203,7 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    async *getContractTransfers(
+    async *getTokenTransfers(
         contract: string,
         criteria: TsunamiTransfersCriteria,
         rangeOptions: TsunamiDataRangeOptions,
@@ -239,7 +239,7 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    async *getContractSelfDestructions(
+    async *getContractsSelfDestructions(
         criteria: ContractSelfDestructionsCriteria,
         rangeOptions: TsunamiDataRangeOptions,
     ): AsyncGenerator<TsunamiContractSelfDestruction, void, undefined> {
@@ -250,7 +250,7 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    async *getContractCreations(
+    async *getContractsCreations(
         criteria: TsunamiContractCreationCriteria,
         rangeOptions: TsunamiDataRangeOptions,
     ): AsyncGenerator<TsunamiContractSelfDestruction, void, undefined> {

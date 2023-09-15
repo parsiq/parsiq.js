@@ -8,7 +8,7 @@ import {
     NftContractCriteria,
     NftTokenTransferItem,
     NftCollectionTokenHolder,
-    NftContractMetadata, NftTokenMetadata
+    NftCollectionMetadata, NftTokenMetadata
 } from "../dto/nft-datalake";
 import {NFT_BASE_URL} from "./urls";
 import {Parsiq} from "./parsiq-client";
@@ -86,9 +86,9 @@ export class NftRequestHandler extends HttpClient {
         }
     }
 
-    public async getContractMetadata(contract: string): Promise<NftContractMetadata> {
+    public async getCollectionMetadata(contract: string): Promise<NftCollectionMetadata> {
         try {
-            const response = await this.instance.get<NftContractMetadata>(`/${contract}/contract-data`);
+            const response = await this.instance.get<NftCollectionMetadata>(`/${contract}/contract-data`);
             if (!response?.data) {
                 throw new Error(MALFORMED_RESPONSE_MESSAGE);
             }
