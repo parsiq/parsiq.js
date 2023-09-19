@@ -66,6 +66,16 @@ client.setChain(ChainId.AVALANCHE_MAINNET);
 console.log((await tsunami.blocks.getLatest()).number);
 ```
 
+## Range options:
+
+Requests that will return multiple entities can accept range options. While similar in nature and names to base API there are some notable differences.
+
+**offset** - as with regular API defines id after which to continue querying.
+
+**limit** - total limit of entities that will be returned.
+
+**batchSize** - determines max amount of entities returned within single http request. 1000 by default
+
 ## More documentation
 
 Documentation and examples are available at https://docs.parsiq.net/ 
