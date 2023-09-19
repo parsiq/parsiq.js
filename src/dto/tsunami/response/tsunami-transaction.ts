@@ -1,4 +1,4 @@
-import { TransactionLog } from './transaction-log';
+import { TsunamiTransactionLog } from './tsunami-transaction-log';
 
 export interface TsunamiTransaction {
   hash: string;
@@ -11,5 +11,5 @@ export interface TsunamiTransaction {
 }
 
 export interface TsunamiTransactionInternals extends TsunamiTransaction {
-  logs?: readonly TransactionLog[];
+  logs?: readonly TsunamiTransactionLog[];
 }

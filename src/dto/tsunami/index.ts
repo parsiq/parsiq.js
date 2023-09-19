@@ -9,7 +9,7 @@ export * from './response/tsunami-log-within-internal-transaction';
 export * from './response/tsunami-basic-log-data';
 export * from './response/tsunami-transaction';
 export * from './response/tsunami-transfer';
-export * from './response/transaction-log';
+export * from './response/tsunami-transaction-log';
 export * from './request/tsunami-block-hash-range-options';
 export * from './request/tsunami-data-range-options';
 export * from './response/tsunami-contract-self-destruction';

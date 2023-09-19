@@ -1,6 +1,6 @@
 import { OpCode } from '../../../enum/op-code';
 
-export interface TransactionLog {
+export interface TsunamiTransactionLog {
   id: string;
   contract: string;
   topic_0?: string;

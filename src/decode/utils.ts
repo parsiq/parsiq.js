@@ -22,7 +22,8 @@ export const decodeTsunamiLog = (log: TsunamiLog, abi: any): TsunamiDecodedLog |
     if (error) {
         return {
             ...log,
-            ...{error}
+            ...{error},
+            decoded: null,
         } as TsunamiDecodingErrorLog
     }
     return {
@@ -50,7 +51,8 @@ export const decodeTsunamiLogForInternalTransaction = (log: TsunamiLogWithinInte
     if (error) {
         return {
             ...log,
-            ...{error}
+            ...{error},
+            decoded: null
         } as TsunamiDecodingErrorLogBelongingToInternalTransaction
     }
     return {
@@ -86,9 +88,11 @@ export const decodeTsunamiInternalTransaction = (
 
     let events: readonly (TsunamiDecodedLogBelongingToInternalTransaction | TsunamiDecodingErrorLogBelongingToInternalTransaction)[] | null = null;
     if (internalTransaction.events) {
-        events = internalTransaction.events.map(event => {return decodeTsunamiLogForInternalTransaction(event, abi)})//this.getDecodedEvents(item.events, abi) as readonly DecodedHistoricalEventBelongingToCall[];
+        events = internalTransaction.events.map(event => {
+            return decodeTsunamiLogForInternalTransaction(event, abi)
+        })//this.getDecodedEvents(item.events, abi) as readonly DecodedHistoricalEventBelongingToCall[];
     }
-    if(error) {
+    if (error) {
         return {
             id: internalTransaction.id,
             sig_hash: internalTransaction.sig_hash,
@@ -101,8 +105,9 @@ export const decodeTsunamiInternalTransaction = (
             origin: internalTransaction.origin,
             contract: internalTransaction.contract,
             value: internalTransaction.value,
-            ...(events ? { events } : {}),
-        ...{error},
+            ...(events ? {events} : {}),
+            ...{error},
+            decoded: null,
         } as TsunamiDecodingErrorInternalTransaction;
     }
 
@@ -116,7 +121,7 @@ export const decodeTsunamiInternalTransaction = (
         origin: internalTransaction.origin,
         contract: internalTransaction.contract,
         value: internalTransaction.value,
-        ...(events ? { events } : {}),
+        ...(events ? {events} : {}),
         decoded,
     } as TsunamiDecodedInternalTransaction;
 };

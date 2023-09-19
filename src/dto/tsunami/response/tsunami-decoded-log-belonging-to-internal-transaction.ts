@@ -6,11 +6,13 @@ export interface TsunamiDecodedLogBelongingToInternalTransaction {
 
     contract: string;
 
-    decoded: { event: string; [k: string]: any } | null;
+    decoded: { event: string; [k: string]: any };
 }
 
 export interface TsunamiDecodingErrorLogBelongingToInternalTransaction extends TsunamiLogWithingInternalTransactionBase {
     op_code: OpCode;
 
     error: string;
+
+    decoded: null; //TODO: it confirms to what we do in Tsunami, but it is really useless
 }
