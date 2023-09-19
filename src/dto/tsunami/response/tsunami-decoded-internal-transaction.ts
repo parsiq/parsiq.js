@@ -1,14 +1,18 @@
 import {TsunamiInternalTransactionBase} from "./tsunami-internal-transaction";
-import {TsunamiDecodedEventBelongingToCall} from "./tsunami-decoded-event-belonging-to-call";
+import {TsunamiDecodedLogBelongingToInternalTransaction} from "./tsunami-decoded-log-belonging-to-internal-transaction";
 
 export interface TsunamiDecodedInternalTransaction extends TsunamiInternalTransactionBase {
-    sig_hash?: string;
-
-    input_data?: string;
-
     decoded: { function: string; [k: string]: any } | null;
 
-    events?: readonly TsunamiDecodedEventBelongingToCall[];
+    events?: readonly TsunamiDecodedLogBelongingToInternalTransaction[];
+}
 
-    error?: string;
+export interface TsunamiDecodingErrorInternalTransaction extends TsunamiInternalTransactionBase {
+    sig_hash: string;
+
+    input_data: string;
+
+    events?: readonly TsunamiDecodedLogBelongingToInternalTransaction[];
+
+    error: string;
 }

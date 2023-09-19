@@ -18,6 +18,11 @@ import {Exact} from "../utils";
 
 export namespace Parsiq {
 
+  export enum DecodindMode {
+    SERVER = 'server',
+    CLIENT = 'client'
+  }
+
   export enum ChainId {
     ETH_MAINNET = 'eip155-1', // Eth Mainnet
     ETH_GOERLI = 'eip155-5', // Eth Goerli
@@ -59,6 +64,10 @@ export namespace Parsiq {
       this.tsunamiRequestHandler.setChain(chainId);
       this.nftRequestHandler.setChain(chainId);
       this.balancesRequestHandler.setChain(chainId);
+    }
+
+    public setDecodingMode(mode: DecodindMode) {
+      this.tsunamiRequestHandler.setDecodingMode(mode);
     }
 
     public readonly blocks = {

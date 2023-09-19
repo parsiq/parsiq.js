@@ -2,8 +2,7 @@ import { TsunamiLogWithinInternalTransaction } from './tsunami-log-within-intern
 import { TsunamiBasicLogData } from './tsunami-basic-log-data';
 
 export interface TsunamiInternalTransactionBase extends TsunamiBasicLogData {
-  output_data?: string;
-  value?: string;
+  value: string;
   sender: string;
 }
 

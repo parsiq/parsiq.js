@@ -1,27 +1,39 @@
-import {Parsiq, TsunamiDecodedInternalTransaction, TsunamiInternalTransaction} from "../src";
+import {Parsiq} from "../src";
 import {YOUR_API_KEY} from "./api-key";
 import {ABI} from "./abi-example";
 
 export async function runInternalTransactions() {
     const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
-    const internalCall = (await client.internalTransactions.getByBlockNumber(
+    for await (const internalTransaction of client.internalTransactions.getByBlockNumber(
         0,
         'latest',
         {contract: ['0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0'], include_events: true},
         undefined,
         {limit: 1}
-    ).next()).value as TsunamiInternalTransaction;
-    console.log(`Tsunami internal transaction - ${JSON.stringify(internalCall)}`, '\n');
+    )) {
+        console.log(`Tsunami internal transaction - ${JSON.stringify(internalTransaction)}`, '\n');
+    }
 
-    const decodedInternalCall = (await client.internalTransactions.getByBlockNumber(
+    for await (const decodedInternalTransaction of client.internalTransactions.getByBlockNumber(
         0,
         'latest',
-        {contract: ['0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0']},
+        {contract: ['0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0'], include_events: true},
         ABI,
-        {limit: 1})
-        .next()).value as TsunamiDecodedInternalTransaction;
-    console.log(`Decoded internal transaction - ${JSON.stringify(decodedInternalCall)}`, '\n');
+        {limit: 3})) {
+        console.log(`Client side decoded tsunami internal transaction - ${JSON.stringify(decodedInternalTransaction)}`, '\n');
+    }
+
+    client.setDecodingMode(Parsiq.DecodindMode.SERVER);
+
+    for await (const decodedInternalTransaction of client.internalTransactions.getByBlockNumber(
+        0,
+        'latest',
+        {contract: ['0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0'], include_events: true},
+        ABI,
+        {limit: 3})) {
+        console.log(`Server side decoded tsunami internal transaction - ${JSON.stringify(decodedInternalTransaction)}`, '\n');
+    }
 }
 
 runInternalTransactions();

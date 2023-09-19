@@ -16,7 +16,7 @@ import {
     TsunamiTransaction,
     TsunamiTransactionInternals,
     TsunamiTransfer,
-    TsunamiDecodedInternalTransaction
+    TsunamiDecodedInternalTransaction, TsunamiDecodingErrorLog
 } from "../dto/tsunami";
 import {TsunamiError} from "./tsunami-error";
 import {TsunamiTransfersCriteria} from "../dto/tsunami/request/tsunami-transfers-criteria";
@@ -24,6 +24,7 @@ import {TsunamiTransactionsCriteria} from "../dto/tsunami/request/tsunami-transa
 import {TSUNAMI_BASE_URL} from "./urls";
 import {Parsiq} from "./parsiq-client";
 import {RangeOptions} from "../dto/common";
+import {decodeTsunamiInternalTransaction, decodeTsunamiLog} from "../decode/utils";
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed Tsunami response';
 const REQUEST_FAILED_MESSAGE = 'Tsunami request failed';
@@ -124,10 +125,16 @@ export class TsunamiRequestHandler extends HttpClient {
     }
 
     public async *getDecodedLogs(criteria: TsunamiLogsCriteria, rangeOptions: TsunamiDataRangeOptions, abi: any) {
-        const stream = this.query<TsunamiDecodedLog>('/decode/events', criteria, rangeOptions, abi);
+        if(this.isClientSideDecoding()) {
+            for await(const log of this.getLogs(criteria, rangeOptions)) {
+                yield decodeTsunamiLog(log, abi);
+            }
+        } else {
+            const stream = this.query<TsunamiDecodedLog | TsunamiDecodingErrorLog>('/decode/events', criteria, rangeOptions, abi);
 
-        for await (const calls of stream) {
-            yield* calls;
+            for await (const calls of stream) {
+                yield* calls;
+            }
         }
     }
 
@@ -140,10 +147,16 @@ export class TsunamiRequestHandler extends HttpClient {
     }
 
     public async *getDecodedInternalTransactions(criteria: TsunamiInternalTransactionsCriteria, rangeOptions: TsunamiDataRangeOptions, abi: any) {
-        const stream = this.query<TsunamiDecodedInternalTransaction>('/decode/calls', criteria, rangeOptions, abi);
+        if(this.isClientSideDecoding()) {
+            for await (const internalTransaction of this.getInternalTransactions(criteria, rangeOptions)) {
+                yield decodeTsunamiInternalTransaction(internalTransaction, abi);
+            }
+        } else {
+            const stream = this.query<TsunamiDecodedInternalTransaction>('/decode/calls', criteria, rangeOptions, abi);
 
-        for await (const calls of stream) {
-            yield* calls;
+            for await (const internalTransactions of stream) {
+                yield* internalTransactions;
+            }
         }
     }
 

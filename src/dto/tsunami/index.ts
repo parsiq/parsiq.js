@@ -17,5 +17,5 @@ export * from './response/tsunami-contract-creation';
 export * from './request/contract-self-destructions-criteria';
 export * from './request/tsunami-contract-creation-criteria';
 export * from './response/tsunami-decoded-internal-transaction';
-export * from './response/tsunami-decoded-event-belonging-to-call';
+export * from './response/tsunami-decoded-log-belonging-to-internal-transaction';
 export * from './response/tsunami-decoded-log';
