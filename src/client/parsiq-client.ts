@@ -299,12 +299,12 @@ export namespace Parsiq {
     }
 
     public readonly balances = {
-      getByAddress: (address: string) => {
-        return this.balancesRequestHandler.getByAddress(address);
+      getByAddress: (address: string, rangeOptions?: RangeOptions) => {
+        return this.balancesRequestHandler.getByAddress(address, {...rangeOptions});
       },
 
-      getByContract: (contract: string) => {
-        return this.balancesRequestHandler.getByContract(contract);
+      getByContract: (contract: string, rangeOptions?: RangeOptions) => {
+        return this.balancesRequestHandler.getByContract(contract, {...rangeOptions});
       },
 
       getContractMetadata: (contract: string) => {
