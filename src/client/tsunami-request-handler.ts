@@ -16,7 +16,7 @@ import {
     TsunamiTransaction,
     TsunamiTransactionInternals,
     TsunamiTransfer,
-    TsunamiDecodedInternalTransaction, TsunamiDecodingErrorLog
+    TsunamiDecodedInternalTransaction, TsunamiDecodingErrorLog, TsunamiAbi
 } from "../dto/tsunami";
 import {TsunamiError} from "./tsunami-error";
 import {TsunamiTransfersCriteria} from "../dto/tsunami/request/tsunami-transfers-criteria";
@@ -124,7 +124,7 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    public async *getDecodedLogs(criteria: TsunamiLogsCriteria, rangeOptions: TsunamiDataRangeOptions, abi: any) {
+    public async *getDecodedLogs(criteria: TsunamiLogsCriteria, rangeOptions: TsunamiDataRangeOptions, abi: TsunamiAbi) {
         if(this.isClientSideDecoding()) {
             for await(const log of this.getLogs(criteria, rangeOptions)) {
                 yield decodeTsunamiLog(log, abi);
@@ -146,7 +146,7 @@ export class TsunamiRequestHandler extends HttpClient {
         }
     }
 
-    public async *getDecodedInternalTransactions(criteria: TsunamiInternalTransactionsCriteria, rangeOptions: TsunamiDataRangeOptions, abi: any) {
+    public async *getDecodedInternalTransactions(criteria: TsunamiInternalTransactionsCriteria, rangeOptions: TsunamiDataRangeOptions, abi: TsunamiAbi) {
         if(this.isClientSideDecoding()) {
             for await (const internalTransaction of this.getInternalTransactions(criteria, rangeOptions)) {
                 yield decodeTsunamiInternalTransaction(internalTransaction, abi);

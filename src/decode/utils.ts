@@ -1,21 +1,25 @@
 import {
     TsunamiDecodedLogBelongingToInternalTransaction,
     TsunamiDecodedInternalTransaction,
-    TsunamiDecodedLog, TsunamiDecodingErrorInternalTransaction,
+    TsunamiDecodedLog,
+    TsunamiDecodingErrorInternalTransaction,
     TsunamiDecodingErrorLog,
     TsunamiInternalTransaction,
-    TsunamiLog, TsunamiDecodingErrorLogBelongingToInternalTransaction, TsunamiLogBelongingToInternalTransaction
+    TsunamiLog,
+    TsunamiDecodingErrorLogBelongingToInternalTransaction,
+    TsunamiLogBelongingToInternalTransaction,
+    TsunamiAbi
 } from "../dto/tsunami";
 import {Fragment, Indexed, Interface, ParamType, Result} from "@ethersproject/abi";
 
 type ValueOrArray<T> = T | ValueOrArray<T>[];
 
-export const decodeTsunamiLog = (log: TsunamiLog, abi: any): TsunamiDecodedLog | TsunamiDecodingErrorLog => {
+export const decodeTsunamiLog = (log: TsunamiLog, abi: TsunamiAbi): TsunamiDecodedLog | TsunamiDecodingErrorLog => {
     let decoded: any | null;
     let error: string | null = null;
 
     try {
-        decoded = decodeTsunamiLogBasedData(log, new Interface(abi['abi']));
+        decoded = decodeTsunamiLogBasedData(log, new Interface(abi.abi));
     } catch (err) {
         error = err?.message;
     }
@@ -39,12 +43,12 @@ export const decodeTsunamiLog = (log: TsunamiLog, abi: any): TsunamiDecodedLog |
     } as TsunamiDecodedLog
 }
 
-export const decodeTsunamiLogForInternalTransaction = (log: TsunamiLogBelongingToInternalTransaction, abi: any): TsunamiDecodedLogBelongingToInternalTransaction | TsunamiDecodingErrorLogBelongingToInternalTransaction => {
+export const decodeTsunamiLogForInternalTransaction = (log: TsunamiLogBelongingToInternalTransaction, abi: TsunamiAbi): TsunamiDecodedLogBelongingToInternalTransaction | TsunamiDecodingErrorLogBelongingToInternalTransaction => {
     let decoded: any | null;
     let error: string | null = null;
 
     try {
-        decoded = decodeTsunamiLogBasedData(log, new Interface(abi['abi']));
+        decoded = decodeTsunamiLogBasedData(log, new Interface(abi.abi));
     } catch (err) {
         error = err?.message;
     }
@@ -64,7 +68,7 @@ export const decodeTsunamiLogForInternalTransaction = (log: TsunamiLogBelongingT
 
 export const decodeTsunamiInternalTransaction = (
     internalTransaction: TsunamiInternalTransaction,
-    abi: any,
+    abi: TsunamiAbi,
 ): TsunamiDecodedInternalTransaction | TsunamiDecodingErrorInternalTransaction => {
     let decoded: any | null = null;
     let error: null | string = null;
@@ -81,7 +85,7 @@ export const decodeTsunamiInternalTransaction = (
     }
 
     try {
-        decoded = decode(internalTransaction, new Interface(abi['abi']));
+        decoded = decode(internalTransaction, new Interface(abi.abi));
     } catch (err) {
         error = err?.message;
     }

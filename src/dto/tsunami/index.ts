@@ -18,3 +18,4 @@ export * from './request/tsunami-contract-creation-criteria';
 export * from './response/tsunami-decoded-internal-transaction';
 export * from './response/tsunami-decoded-log-belonging-to-internal-transaction';
 export * from './response/tsunami-decoded-log';
+export * from './request/abi';
