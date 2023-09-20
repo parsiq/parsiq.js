@@ -1,4 +1,4 @@
-export class TsunamiBlockHeader {
+export interface TsunamiBlockHeader {
   nonce: number;
   gas_used: number;
   mix_hash: string;

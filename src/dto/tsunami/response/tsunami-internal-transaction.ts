@@ -1,13 +1,16 @@
-import { TsunamiLogWithinInternalTransaction } from './tsunami-log-within-internal-transaction';
-import { TsunamiBasicLogData } from './tsunami-basic-log-data';
+import { TsunamiLogBelongingToInternalTransaction } from './tsunami-log-belonging-to-internal-transaction';
 
-export interface TsunamiInternalTransactionBase extends TsunamiBasicLogData {
-  value: string;
-  sender: string;
-}
-
-export interface TsunamiInternalTransaction extends TsunamiInternalTransactionBase {
+export interface TsunamiInternalTransaction {
+  id: string;
+  tx_hash: string;
+  block_hash: string;
+  block_number: number;
+  timestamp: number;
+  origin: string;
+  contract: string;
   sig_hash: string;
   input_data: string;
-  events?: readonly TsunamiLogWithinInternalTransaction[];
+  events?: readonly TsunamiLogBelongingToInternalTransaction[];
+  value: string;
+  sender: string;
 }

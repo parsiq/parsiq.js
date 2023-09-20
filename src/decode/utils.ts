@@ -4,7 +4,7 @@ import {
     TsunamiDecodedLog, TsunamiDecodingErrorInternalTransaction,
     TsunamiDecodingErrorLog,
     TsunamiInternalTransaction,
-    TsunamiLog, TsunamiDecodingErrorLogBelongingToInternalTransaction, TsunamiLogWithinInternalTransaction
+    TsunamiLog, TsunamiDecodingErrorLogBelongingToInternalTransaction, TsunamiLogBelongingToInternalTransaction
 } from "../dto/tsunami";
 import {Fragment, Indexed, Interface, ParamType, Result} from "@ethersproject/abi";
 
@@ -39,7 +39,7 @@ export const decodeTsunamiLog = (log: TsunamiLog, abi: any): TsunamiDecodedLog |
     } as TsunamiDecodedLog
 }
 
-export const decodeTsunamiLogForInternalTransaction = (log: TsunamiLogWithinInternalTransaction, abi: any): TsunamiDecodedLogBelongingToInternalTransaction | TsunamiDecodingErrorLogBelongingToInternalTransaction => {
+export const decodeTsunamiLogForInternalTransaction = (log: TsunamiLogBelongingToInternalTransaction, abi: any): TsunamiDecodedLogBelongingToInternalTransaction | TsunamiDecodingErrorLogBelongingToInternalTransaction => {
     let decoded: any | null;
     let error: string | null = null;
 
@@ -126,7 +126,7 @@ export const decodeTsunamiInternalTransaction = (
     } as TsunamiDecodedInternalTransaction;
 };
 
-const decodeTsunamiLogBasedData = (tsunamiLog: TsunamiLog | TsunamiLogWithinInternalTransaction,
+const decodeTsunamiLogBasedData = (tsunamiLog: TsunamiLog | TsunamiLogBelongingToInternalTransaction,
                                    abiInterface: Interface) => {
     const eventFragment = abiInterface.getEvent(tsunamiLog.topic_0 ?? '');
 
