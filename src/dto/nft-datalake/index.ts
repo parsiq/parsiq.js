@@ -4,7 +4,6 @@ export * from './response/nft-transfer-metadata';
 export * from './response/nft-sale-price-data';
 export * from './response/nft-address-inventory-item';
 export * from './response/nft-collection-token-holder';
-export * from './response/nft-history-item';
 export * from './response/nft-token-transfer-item';
 export * from './request/nft-supplemental-data-criteria';
 export * from './request/nft-contract-criteria';
