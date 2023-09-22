@@ -10,7 +10,7 @@ import {
   NftCollectionTokenHolder,
   NftCollectionMetadata,
   NftTokenMetadata,
-} from '../dto/nft-datalake';
+} from '../dto/nft-api';
 import { NFT_BASE_URL } from './urls';
 import * as Parsiq from './parsiq-client';
 import { RangeOptions } from '../dto/common';

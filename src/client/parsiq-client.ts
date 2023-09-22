@@ -11,7 +11,7 @@ import { LATEST_TAG } from '../constants';
 import { TsunamiRequestHandler } from './tsunami-request-handler';
 import { TsunamiTransfersCriteria } from '../dto/tsunami/request/tsunami-transfers-criteria';
 import { NftRequestHandler } from './nft-request-handler';
-import { NftSupplementalDataCriteria, NftContractCriteria } from '../dto/nft-datalake';
+import { NftSupplementalDataCriteria, NftContractCriteria } from '../dto/nft-api';
 import { BalancesRequestHandler } from './balances-request-handler';
 import { RangeOptions } from '../dto/common';
 import { Exact } from '../utils';

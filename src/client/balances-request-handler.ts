@@ -5,7 +5,7 @@ import {
   BalancesTokenHolderByAddressItem,
   BalancesTokenHolderByContractItem,
   BalancesTokenInfoItemWithSupplies,
-} from '../dto/balances-datalake';
+} from '../dto/balances-api';
 import { BALANCES_BASE_URL } from './urls';
 import * as Parsiq from './parsiq-client';
 import { RangeOptions } from '../dto/common';
