@@ -2,7 +2,6 @@ import { HttpClient } from './http-client';
 import { AxiosRequestConfig, HttpStatusCode, isAxiosError } from 'axios';
 import { IAxiosRetryConfig } from 'axios-retry';
 import {
-  TsunamiDecodedLog,
   TsunamiContractCreationCriteria,
   ContractSelfDestructionsCriteria,
   TsunamiInternalTransactionsCriteria,
@@ -16,8 +15,6 @@ import {
   TsunamiTransaction,
   TsunamiTransactionInternals,
   TsunamiTransfer,
-  TsunamiDecodedInternalTransaction,
-  TsunamiDecodingErrorLog,
   TsunamiAbi,
 } from '../dto/tsunami';
 import { TsunamiError } from './tsunami-error';
@@ -127,21 +124,8 @@ export class TsunamiRequestHandler extends HttpClient {
   }
 
   public async *getDecodedLogs(criteria: TsunamiLogsCriteria, rangeOptions: TsunamiDataRangeOptions, abi: TsunamiAbi) {
-    if (this.isClientSideDecoding()) {
-      for await (const log of this.getLogs(criteria, rangeOptions)) {
-        yield decodeTsunamiLog(log, abi);
-      }
-    } else {
-      const stream = this.query<TsunamiDecodedLog | TsunamiDecodingErrorLog>(
-        '/decode/events',
-        criteria,
-        rangeOptions,
-        abi,
-      );
-
-      for await (const calls of stream) {
-        yield* calls;
-      }
+    for await (const log of this.getLogs(criteria, rangeOptions)) {
+      yield decodeTsunamiLog(log, abi);
     }
   }
 
@@ -161,16 +145,8 @@ export class TsunamiRequestHandler extends HttpClient {
     rangeOptions: TsunamiDataRangeOptions,
     abi: TsunamiAbi,
   ) {
-    if (this.isClientSideDecoding()) {
-      for await (const internalTransaction of this.getInternalTransactions(criteria, rangeOptions)) {
-        yield decodeTsunamiInternalTransaction(internalTransaction, abi);
-      }
-    } else {
-      const stream = this.query<TsunamiDecodedInternalTransaction>('/decode/calls', criteria, rangeOptions, abi);
-
-      for await (const internalTransactions of stream) {
-        yield* internalTransactions;
-      }
+    for await (const internalTransaction of this.getInternalTransactions(criteria, rangeOptions)) {
+      yield decodeTsunamiInternalTransaction(internalTransaction, abi);
     }
   }
 

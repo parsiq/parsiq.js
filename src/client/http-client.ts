@@ -17,7 +17,6 @@ const baseUrl = (instanceUrl: string, chain: Parsiq.ChainId) => {
 export abstract class HttpClient {
   protected readonly instance: AxiosInstance;
   protected readonly instanceUrl: string;
-  private useClientSideDecoding = true;
 
   protected constructor(
     instanceUrl: string,
@@ -37,14 +36,6 @@ export abstract class HttpClient {
 
   public setChain(chain: Parsiq.ChainId) {
     this.instance.defaults.baseURL = baseUrl(this.instanceUrl, chain);
-  }
-
-  public setDecodingMode(decodingMode: Parsiq.DecodindMode) {
-    this.useClientSideDecoding = Parsiq.DecodindMode.CLIENT === decodingMode;
-  }
-
-  protected isClientSideDecoding() {
-    return this.useClientSideDecoding;
   }
 
   protected async *query<Item = any>(
@@ -90,15 +81,7 @@ export abstract class HttpClient {
         params,
       })
       .catch(error => {
-        if (isAxiosError(error)) {
-          throw new TsunamiError(
-            error.response?.data?.message ?? REQUEST_FAILED_MESSAGE,
-            error.response?.status ?? null,
-            error.response?.data?.error ?? null,
-            error.cause ?? null,
-          );
-        }
-        throw new TsunamiError(REQUEST_FAILED_MESSAGE, null, null, error);
+        throw this.getRequestProcessingError(error);
       });
 
     if (!response?.data?.items) {

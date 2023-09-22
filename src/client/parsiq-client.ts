@@ -16,11 +16,6 @@ import { BalancesRequestHandler } from './balances-request-handler';
 import { RangeOptions } from '../dto/common';
 import { Exact } from '../utils';
 
-export enum DecodindMode {
-  SERVER = 'server',
-  CLIENT = 'client',
-}
-
 export enum ChainId {
   ETH_MAINNET = 'eip155-1', // Eth Mainnet
   ETH_GOERLI = 'eip155-5', // Eth Goerli
@@ -45,10 +40,6 @@ export function createClient(
 }
 
 class ParsiqClient {
-  private readonly tsunamiRequestHandler: TsunamiRequestHandler;
-  private readonly nftRequestHandler: NftRequestHandler;
-  private readonly balancesRequestHandler: BalancesRequestHandler;
-
   constructor(
     apiKey: string,
     chain: ChainId,
@@ -60,16 +51,6 @@ class ParsiqClient {
     this.tsunamiRequestHandler = new TsunamiRequestHandler(apiKey, chain, config);
     this.nftRequestHandler = new NftRequestHandler(apiKey, chain, config);
     this.balancesRequestHandler = new BalancesRequestHandler(apiKey, chain, config);
-  }
-
-  public setChain(chainId: ChainId) {
-    this.tsunamiRequestHandler.setChain(chainId);
-    this.nftRequestHandler.setChain(chainId);
-    this.balancesRequestHandler.setChain(chainId);
-  }
-
-  public setDecodingMode(mode: DecodindMode) {
-    this.tsunamiRequestHandler.setDecodingMode(mode);
   }
 
   public readonly blocks = {
@@ -464,4 +445,14 @@ class ParsiqClient {
       return this.balancesRequestHandler.getContractMetadata(contract);
     },
   };
+
+  private readonly tsunamiRequestHandler: TsunamiRequestHandler;
+  private readonly nftRequestHandler: NftRequestHandler;
+  private readonly balancesRequestHandler: BalancesRequestHandler;
+
+  public setChain(chainId: ChainId) {
+    this.tsunamiRequestHandler.setChain(chainId);
+    this.nftRequestHandler.setChain(chainId);
+    this.balancesRequestHandler.setChain(chainId);
+  }
 }

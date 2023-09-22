@@ -143,13 +143,13 @@ const decodeTsunamiLogBasedData = (
 ) => {
   const eventFragment = abiInterface.getEvent(tsunamiLog.topic_0 ?? '');
 
-  const decoded = abiInterface.decodeEventLog(
-    eventFragment,
-    String(tsunamiLog.log_data ?? ''),
-    [tsunamiLog.topic_0, tsunamiLog.topic_1, tsunamiLog.topic_2, tsunamiLog.topic_3].filter(
-      topic => typeof topic === 'string',
-    ) as string[],
-  );
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+  const decoded = abiInterface.decodeEventLog(eventFragment, String(tsunamiLog.log_data ?? ''), [
+    tsunamiLog.topic_0,
+    tsunamiLog.topic_1,
+    tsunamiLog.topic_2,
+    tsunamiLog.topic_3,
+  ]);
 
   return {
     event: eventFragment.name,
