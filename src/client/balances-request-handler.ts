@@ -7,7 +7,7 @@ import {
   BalancesTokenInfoItemWithSupplies,
 } from '../dto/balances-datalake';
 import { BALANCES_BASE_URL } from './urls';
-import { Parsiq } from './parsiq-client';
+import * as Parsiq from './parsiq-client';
 import { RangeOptions } from '../dto/common';
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed NFT DL response';

@@ -3,7 +3,7 @@ import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
 import { TsunamiError } from './tsunami-error';
 import { convertForRequest } from './convertor';
 import { BasicRangeParams } from '../dto/common';
-import { Parsiq } from './parsiq-client';
+import * as Parsiq from './parsiq-client';
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed server response';
 const REQUEST_FAILED_MESSAGE = 'Server request failed';

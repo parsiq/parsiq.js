@@ -1,4 +1,4 @@
-import {Parsiq} from "../src";
+import * as Parsiq from "../src";
 import {YOUR_API_KEY} from "./api-key";
 
 export async function runContracts() {

@@ -24,7 +24,7 @@ import { TsunamiError } from './tsunami-error';
 import { TsunamiTransfersCriteria } from '../dto/tsunami/request/tsunami-transfers-criteria';
 import { TsunamiTransactionsCriteria } from '../dto/tsunami/request/tsunami-transactions-criteria';
 import { TSUNAMI_BASE_URL } from './urls';
-import { Parsiq } from './parsiq-client';
+import * as Parsiq from './parsiq-client';
 import { RangeOptions } from '../dto/common';
 import { decodeTsunamiInternalTransaction, decodeTsunamiLog } from '../decode/utils';
 

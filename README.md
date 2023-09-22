@@ -13,7 +13,7 @@ $ npm i @parsiq/parsiq.js
 Set credentials and select a chain to query:
 
 ```typescript
-import { Parsiq } from '@parsiq/parsiq.js';
+import * as Parsiq from '@parsiq/parsiq.js';
 
 const client = new Parsiq.createClient(process.env.TSUNAMI_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 ```
