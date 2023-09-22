@@ -1,5 +1,5 @@
-import {NftSupplementalDataCriteria} from "./nft-supplemental-data-criteria";
+import { NftSupplementalDataCriteria } from './nft-supplemental-data-criteria';
 
-export interface NftContractCriteria extends NftSupplementalDataCriteria{
-    contract?: string;
+export interface NftContractCriteria extends NftSupplementalDataCriteria {
+  contract?: string;
 }

@@ -1,5 +1,5 @@
-import {NftTransferMetadata} from "./nft-transfer-metadata";
-import {NftSalePriceData} from "./nft-sale-price-data";
+import { NftTransferMetadata } from './nft-transfer-metadata';
+import { NftSalePriceData } from './nft-sale-price-data';
 
 export interface NftTokenBaseMetadata {
   token_uri?: string;

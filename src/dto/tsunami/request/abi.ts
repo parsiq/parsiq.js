@@ -1,3 +1,3 @@
 export interface TsunamiAbi {
-    abi: any[]
+  abi: any[];
 }

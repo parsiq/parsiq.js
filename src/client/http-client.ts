@@ -1,9 +1,9 @@
-import axios, {AxiosInstance, AxiosRequestConfig, isAxiosError} from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, isAxiosError } from 'axios';
 import axiosRetry, { IAxiosRetryConfig } from 'axios-retry';
-import {TsunamiError} from "./tsunami-error";
-import {convertForRequest} from "./convertor";
-import {BasicRangeParams} from "../dto/common";
-import {Parsiq} from "./parsiq-client";
+import { TsunamiError } from './tsunami-error';
+import { convertForRequest } from './convertor';
+import { BasicRangeParams } from '../dto/common';
+import { Parsiq } from './parsiq-client';
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed server response';
 const REQUEST_FAILED_MESSAGE = 'Server request failed';
@@ -19,7 +19,13 @@ export abstract class HttpClient {
   protected readonly instanceUrl: string;
   private useClientSideDecoding = true;
 
-  protected constructor(instanceUrl: string, chainId: Parsiq.ChainId, apiKey: string, config: AxiosRequestConfig, retry: IAxiosRetryConfig) {
+  protected constructor(
+    instanceUrl: string,
+    chainId: Parsiq.ChainId,
+    apiKey: string,
+    config: AxiosRequestConfig,
+    retry: IAxiosRetryConfig,
+  ) {
     this.instance = axios.create({
       ...config,
       baseURL: baseUrl(instanceUrl, chainId),
@@ -41,13 +47,11 @@ export abstract class HttpClient {
     return this.useClientSideDecoding;
   }
 
-  protected async *query<
-      Item = any,
-  >(
-      endpoint: string,
-      criteria: Record<string, any>,
-      boundaries: Record<string, any>,
-      body?: any,
+  protected async *query<Item = any>(
+    endpoint: string,
+    criteria: Record<string, any>,
+    boundaries: Record<string, any>,
+    body?: any,
   ): AsyncGenerator<Item[]> {
     let offset: string | undefined;
     let hasMore;
@@ -61,7 +65,10 @@ export abstract class HttpClient {
         limit: Math.min(boundaries.batchSize ?? 1000, boundaries.limit ?? 1000, 1000),
       };
 
-      const response = body===undefined ? await this.doRequest<Item>(endpoint, params) : await this.postRequest<Item>(endpoint, body, params);
+      const response =
+        body === undefined
+          ? await this.doRequest<Item>(endpoint, params)
+          : await this.postRequest<Item>(endpoint, body, params);
 
       if (response.data.items.length > hardLimit - fetched) {
         yield response.data.items.splice(0, hardLimit - fetched);
@@ -77,24 +84,22 @@ export abstract class HttpClient {
     } while (hasMore && fetched < hardLimit);
   }
 
-  protected async doRequest<
-      Item  = any,
-  >(endpoint: string, params: Record<string, string | number>) {
+  protected async doRequest<Item = any>(endpoint: string, params: Record<string, string | number>) {
     const response = await this.instance
-        .get<{ range: BasicRangeParams; items: Item[] }>(endpoint, {
-          params,
-        })
-        .catch(error => {
-          if (isAxiosError(error)) {
-            throw new TsunamiError(
-                error.response?.data?.message ?? REQUEST_FAILED_MESSAGE,
-                error.response?.status ?? null,
-                error.response?.data?.error ?? null,
-                error.cause ?? null,
-            );
-          }
-          throw new TsunamiError(REQUEST_FAILED_MESSAGE, null, null, error);
-        });
+      .get<{ range: BasicRangeParams; items: Item[] }>(endpoint, {
+        params,
+      })
+      .catch(error => {
+        if (isAxiosError(error)) {
+          throw new TsunamiError(
+            error.response?.data?.message ?? REQUEST_FAILED_MESSAGE,
+            error.response?.status ?? null,
+            error.response?.data?.error ?? null,
+            error.cause ?? null,
+          );
+        }
+        throw new TsunamiError(REQUEST_FAILED_MESSAGE, null, null, error);
+      });
 
     if (!response?.data?.items) {
       throw new TsunamiError(MALFORMED_RESPONSE_MESSAGE, null, null);
@@ -103,24 +108,22 @@ export abstract class HttpClient {
     return response;
   }
 
-  protected async postRequest<
-      Item = any,
-  >(endpoint: string, body: any, params: Record<string, string | number>) {
+  protected async postRequest<Item = any>(endpoint: string, body: any, params: Record<string, string | number>) {
     const response = await this.instance
-        .post<{ range: BasicRangeParams; items: Item[] }>(endpoint, body, {
-          params,
-        })
-        .catch(error => {
-          if (isAxiosError(error)) {
-            throw new TsunamiError(
-                error.response?.data?.message ?? REQUEST_FAILED_MESSAGE,
-                error.response?.status ?? null,
-                error.response?.data?.error ?? null,
-                error.cause ?? null,
-            );
-          }
-          throw new TsunamiError(REQUEST_FAILED_MESSAGE, null, null, error);
-        });
+      .post<{ range: BasicRangeParams; items: Item[] }>(endpoint, body, {
+        params,
+      })
+      .catch(error => {
+        if (isAxiosError(error)) {
+          throw new TsunamiError(
+            error.response?.data?.message ?? REQUEST_FAILED_MESSAGE,
+            error.response?.status ?? null,
+            error.response?.data?.error ?? null,
+            error.cause ?? null,
+          );
+        }
+        throw new TsunamiError(REQUEST_FAILED_MESSAGE, null, null, error);
+      });
 
     if (!response?.data?.items) {
       throw new TsunamiError(MALFORMED_RESPONSE_MESSAGE, null, null);
@@ -132,10 +135,10 @@ export abstract class HttpClient {
   protected getRequestProcessingError(error: any) {
     if (isAxiosError(error)) {
       return new TsunamiError(
-          error.response?.data?.message ?? REQUEST_FAILED_MESSAGE,
-          error.response?.status ?? null,
-          error.response?.data?.error ?? null,
-          error.cause ?? null,
+        error.response?.data?.message ?? REQUEST_FAILED_MESSAGE,
+        error.response?.status ?? null,
+        error.response?.data?.error ?? null,
+        error.cause ?? null,
       );
     }
     return new TsunamiError(REQUEST_FAILED_MESSAGE, null, null, error);

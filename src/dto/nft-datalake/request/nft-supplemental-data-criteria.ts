@@ -1,4 +1,4 @@
 export interface NftSupplementalDataCriteria {
-    metadata?: boolean;
-    sale_price?: boolean;
+  metadata?: boolean;
+  sale_price?: boolean;
 }

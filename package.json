@@ -15,6 +15,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint \"src/**/*.ts\"",
     "lint:fix": "eslint \"src/**/*.ts\" --fix",
+    "prettier": "npx prettier --check src/",
+    "prettier:fix": "npx prettier --write src/",
     "build": "rm -rf dist/* && tsc"
   },
   "author": {
