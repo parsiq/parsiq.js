@@ -9,7 +9,6 @@ export async function runInternalTransactions() {
         0,
         'latest',
         {contract: ['0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0'], include_events: true},
-        undefined,
         {limit: 1}
     )) {
         console.log(`Tsunami internal transaction - ${JSON.stringify(internalTransaction)}`, '\n');

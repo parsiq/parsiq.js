@@ -35,7 +35,6 @@ for await (const log of client.logs.getByBlockNumber(
     0,
     'latest',
     { contract: ['0x1e2fbe6be9eb39fc894d38be976111f332172d83'] },
-    undefined,
     {limit: 10}
 )) {
     console.log(log);

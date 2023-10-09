@@ -3,6 +3,13 @@ import {
   ContractSelfDestructionsCriteria,
   TsunamiInternalTransactionsCriteria,
   TsunamiLogsCriteria,
+  TsunamiLog,
+  TsunamiDecodedLog,
+  TsunamiAbi,
+  TsunamiDecodingErrorLog,
+  TsunamiInternalTransaction,
+  TsunamiDecodedInternalTransaction,
+  TsunamiDecodingErrorInternalTransaction,
 } from '../dto/tsunami';
 import { AxiosRequestConfig } from 'axios';
 import { IAxiosRetryConfig } from 'axios-retry';
@@ -72,64 +79,18 @@ class ParsiqClient {
   };
 
   public readonly logs = {
-    getByBlockNumber: (
-      blockNumberStart: number,
-      blockNumberEnd: number | typeof LATEST_TAG,
-      criteria: TsunamiLogsCriteria,
-      abi?: any,
-      rangeOptions?: RangeOptions,
-    ) => {
-      if (abi) {
-        return this.tsunamiRequestHandler.getDecodedLogs(
-          criteria,
-          { ...rangeOptions, block_number_start: blockNumberStart, block_number_end: blockNumberEnd },
-          abi,
-        );
-      }
-      return this.tsunamiRequestHandler.getLogs(criteria, {
-        ...rangeOptions,
-        block_number_start: blockNumberStart,
-        block_number_end: blockNumberEnd,
-      });
-    },
-
-    getByTimestamp: (
-      timestampStart: number,
-      timestampEnd: number,
-      criteria: TsunamiLogsCriteria,
-      abi?: any,
-      rangeOptions?: RangeOptions,
-    ) => {
-      if (abi) {
-        return this.tsunamiRequestHandler.getDecodedLogs(
-          criteria,
-          { ...rangeOptions, timestamp_start: timestampStart, timestamp_end: timestampEnd },
-          abi,
-        );
-      }
-      return this.tsunamiRequestHandler.getLogs(criteria, {
-        ...rangeOptions,
-        timestamp_start: timestampStart,
-        timestamp_end: timestampEnd,
-      });
-    },
-
-    getByBlockHash: (blockHash: string, criteria: TsunamiLogsCriteria, abi?: any, rangeOptions?: RangeOptions) => {
-      if (abi) {
-        return this.tsunamiRequestHandler.getDecodedLogs(
-          criteria,
-          {
-            ...rangeOptions,
-            block_hash: blockHash,
-          },
-          abi,
-        );
-      }
-      return this.tsunamiRequestHandler.getLogs(criteria, { ...rangeOptions, block_hash: blockHash });
-    },
+    getByTimestamp: this.getLogsByTimestamp.bind(this),
+    getByBlockNumber: this.getLogsByBlockNumber.bind(this),
+    getByBlockHash: this.getLogsByBlockHash.bind(this),
   };
 
   public readonly internalTransactions = {
+    getByTimestamp: this.getInternalTransactionsByTimestamp.bind(this),
+    getByBlockNumber: this.getInternalTransactionsByBlockNumber.bind(this),
+    getByBlockHash: this.getInternalTransactionsByBlockHash.bind(this),
+  };
+
+  public readonly internalTransactionss = {
     getByBlockNumber: (
       blockNumberStart: number,
       blockNumberEnd: number | typeof LATEST_TAG,
@@ -454,5 +415,211 @@ class ParsiqClient {
     this.tsunamiRequestHandler.setChain(chainId);
     this.nftRequestHandler.setChain(chainId);
     this.balancesRequestHandler.setChain(chainId);
+  }
+
+  private isTsunamiAbi(value: any): value is TsunamiAbi {
+    return value && typeof value.abi !== 'undefined';
+  }
+
+  private getLogsByTimestamp(
+    timestampStart: number,
+    timestampEnd: number,
+    criteria: TsunamiLogsCriteria,
+    rangeOptions?: RangeOptions,
+  ): AsyncGenerator<TsunamiLog, void, undefined>;
+  private getLogsByTimestamp(
+    timestampStart: number,
+    timestampEnd: number,
+    criteria: TsunamiLogsCriteria,
+    abi: TsunamiAbi,
+    rangeOptions?: RangeOptions,
+  ): AsyncGenerator<TsunamiDecodedLog | TsunamiDecodingErrorLog, void, undefined>;
+
+  private getLogsByTimestamp(
+    timestampStart: number,
+    timestampEnd: number,
+    criteria: TsunamiLogsCriteria,
+    abiOrRange?: TsunamiAbi | RangeOptions,
+    rangeOptions?: RangeOptions,
+  ) {
+    if (this.isTsunamiAbi(abiOrRange)) {
+      return this.tsunamiRequestHandler.getDecodedLogs(
+        criteria,
+        { ...rangeOptions, timestamp_start: timestampStart, timestamp_end: timestampEnd },
+        abiOrRange,
+      );
+    }
+    return this.tsunamiRequestHandler.getLogs(criteria, {
+      ...(abiOrRange as RangeOptions),
+      timestamp_start: timestampStart,
+      timestamp_end: timestampEnd,
+    });
+  }
+
+  private getLogsByBlockNumber(
+    blockNumberStart: number,
+    blockNumberEnd: number | typeof LATEST_TAG,
+    criteria: TsunamiLogsCriteria,
+    rangeOptions?: RangeOptions,
+  ): AsyncGenerator<TsunamiLog, void, undefined>;
+  private getLogsByBlockNumber(
+    blockNumberStart: number,
+    blockNumberEnd: number | typeof LATEST_TAG,
+    criteria: TsunamiLogsCriteria,
+    abi: TsunamiAbi,
+    rangeOptions?: RangeOptions,
+  ): AsyncGenerator<TsunamiDecodedLog | TsunamiDecodingErrorLog, void, undefined>;
+
+  private getLogsByBlockNumber(
+    blockNumberStart: number,
+    blockNumberEnd: number | typeof LATEST_TAG,
+    criteria: TsunamiLogsCriteria,
+    abiOrRange?: TsunamiAbi | RangeOptions,
+    rangeOptions?: RangeOptions,
+  ) {
+    if (this.isTsunamiAbi(abiOrRange)) {
+      return this.tsunamiRequestHandler.getDecodedLogs(
+        criteria,
+        { ...rangeOptions, block_number_start: blockNumberStart, block_number_end: blockNumberEnd },
+        abiOrRange,
+      );
+    }
+    return this.tsunamiRequestHandler.getLogs(criteria, {
+      ...(abiOrRange as RangeOptions),
+      block_number_start: blockNumberStart,
+      block_number_end: blockNumberEnd,
+    });
+  }
+
+  private getLogsByBlockHash(
+    blockHash: string,
+    criteria: TsunamiLogsCriteria,
+    rangeOptions?: RangeOptions,
+  ): AsyncGenerator<TsunamiLog, void, undefined>;
+  private getLogsByBlockHash(
+    blockHash: string,
+    criteria: TsunamiLogsCriteria,
+    abi: TsunamiAbi,
+    rangeOptions?: RangeOptions,
+  ): AsyncGenerator<TsunamiDecodedLog | TsunamiDecodingErrorLog, void, unknown>;
+
+  private getLogsByBlockHash(
+    blockHash: string,
+    criteria: TsunamiLogsCriteria,
+    abiOrRange?: TsunamiAbi | RangeOptions,
+    rangeOptions?: RangeOptions,
+  ) {
+    if (this.isTsunamiAbi(abiOrRange)) {
+      return this.tsunamiRequestHandler.getDecodedLogs(
+        criteria,
+        {
+          ...rangeOptions,
+          block_hash: blockHash,
+        },
+        abiOrRange,
+      );
+    }
+    return this.tsunamiRequestHandler.getLogs(criteria, { ...(abiOrRange as RangeOptions), block_hash: blockHash });
+  }
+
+  private getInternalTransactionsByBlockNumber(
+    blockNumberStart: number,
+    blockNumberEnd: number | typeof LATEST_TAG,
+    criteria: TsunamiInternalTransactionsCriteria,
+    rangeOptions?: RangeOptions,
+  ): AsyncGenerator<TsunamiInternalTransaction, void, undefined>;
+  private getInternalTransactionsByBlockNumber(
+    blockNumberStart: number,
+    blockNumberEnd: number | typeof LATEST_TAG,
+    criteria: TsunamiInternalTransactionsCriteria,
+    abi: TsunamiAbi,
+    rangeOptions?: RangeOptions,
+  ): AsyncGenerator<TsunamiDecodedInternalTransaction | TsunamiDecodingErrorInternalTransaction, void, undefined>;
+
+  private getInternalTransactionsByBlockNumber(
+    blockNumberStart: number,
+    blockNumberEnd: number | typeof LATEST_TAG,
+    criteria: TsunamiInternalTransactionsCriteria,
+    abiOrRange?: TsunamiAbi | RangeOptions,
+    rangeOptions?: RangeOptions,
+  ) {
+    if (this.isTsunamiAbi(abiOrRange)) {
+      return this.tsunamiRequestHandler.getDecodedInternalTransactions(
+        criteria,
+        { ...rangeOptions, block_number_start: blockNumberStart, block_number_end: blockNumberEnd },
+        abiOrRange,
+      );
+    }
+    return this.tsunamiRequestHandler.getInternalTransactions(criteria, {
+      ...(abiOrRange as RangeOptions),
+      block_number_start: blockNumberStart,
+      block_number_end: blockNumberEnd,
+    });
+  }
+
+  private getInternalTransactionsByTimestamp(
+    timestampStart: number,
+    timestampEnd: number,
+    criteria: TsunamiInternalTransactionsCriteria,
+    rangeOptions?: RangeOptions,
+  ): AsyncGenerator<TsunamiInternalTransaction, void, undefined>;
+  private getInternalTransactionsByTimestamp(
+    timestampStart: number,
+    timestampEnd: number,
+    criteria: TsunamiInternalTransactionsCriteria,
+    abi: TsunamiAbi,
+    rangeOptions?: RangeOptions,
+  ): AsyncGenerator<TsunamiDecodedInternalTransaction | TsunamiDecodingErrorInternalTransaction, void, undefined>;
+
+  private getInternalTransactionsByTimestamp(
+    timestampStart: number,
+    timestampEnd: number,
+    criteria: TsunamiInternalTransactionsCriteria,
+    abiOrRange?: TsunamiAbi | RangeOptions,
+    rangeOptions?: RangeOptions,
+  ) {
+    if (this.isTsunamiAbi(abiOrRange)) {
+      return this.tsunamiRequestHandler.getDecodedInternalTransactions(
+        criteria,
+        { ...rangeOptions, timestamp_start: timestampStart, timestamp_end: timestampEnd },
+        abiOrRange,
+      );
+    }
+    return this.tsunamiRequestHandler.getInternalTransactions(criteria, {
+      ...(abiOrRange as RangeOptions),
+      timestamp_start: timestampStart,
+      timestamp_end: timestampEnd,
+    });
+  }
+
+  private getInternalTransactionsByBlockHash(
+    blockHash: string,
+    criteria: TsunamiInternalTransactionsCriteria,
+    rangeOptions?: RangeOptions,
+  ): AsyncGenerator<TsunamiInternalTransaction, void, undefined>;
+  private getInternalTransactionsByBlockHash(
+    blockHash: string,
+    criteria: TsunamiInternalTransactionsCriteria,
+    abi: TsunamiAbi,
+    rangeOptions?: RangeOptions,
+  ): AsyncGenerator<TsunamiDecodedInternalTransaction | TsunamiDecodingErrorInternalTransaction, void, undefined>;
+
+  private getInternalTransactionsByBlockHash(
+    blockHash: string,
+    criteria: TsunamiInternalTransactionsCriteria,
+    abiOrRange?: TsunamiAbi | RangeOptions,
+    rangeOptions?: RangeOptions,
+  ) {
+    if (this.isTsunamiAbi(abiOrRange)) {
+      return this.tsunamiRequestHandler.getDecodedInternalTransactions(
+        criteria,
+        { ...rangeOptions, block_hash: blockHash },
+        abiOrRange,
+      );
+    }
+    return this.tsunamiRequestHandler.getInternalTransactions(criteria, {
+      ...(abiOrRange as RangeOptions),
+      block_hash: blockHash,
+    });
   }
 }
