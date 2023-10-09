@@ -90,69 +90,6 @@ class ParsiqClient {
     getByBlockHash: this.getInternalTransactionsByBlockHash.bind(this),
   };
 
-  public readonly internalTransactionss = {
-    getByBlockNumber: (
-      blockNumberStart: number,
-      blockNumberEnd: number | typeof LATEST_TAG,
-      criteria: TsunamiInternalTransactionsCriteria,
-      abi?: any,
-      rangeOptions?: RangeOptions,
-    ) => {
-      if (abi) {
-        return this.tsunamiRequestHandler.getDecodedInternalTransactions(
-          criteria,
-          { ...rangeOptions, block_number_start: blockNumberStart, block_number_end: blockNumberEnd },
-          abi,
-        );
-      }
-      return this.tsunamiRequestHandler.getInternalTransactions(criteria, {
-        ...rangeOptions,
-        block_number_start: blockNumberStart,
-        block_number_end: blockNumberEnd,
-      });
-    },
-
-    getByTimestamp: (
-      timestampStart: number,
-      timestampEnd: number,
-      criteria: TsunamiInternalTransactionsCriteria,
-      abi?: any,
-      rangeOptions?: RangeOptions,
-    ) => {
-      if (abi) {
-        return this.tsunamiRequestHandler.getDecodedInternalTransactions(
-          criteria,
-          { ...rangeOptions, timestamp_start: timestampStart, timestamp_end: timestampEnd },
-          abi,
-        );
-      }
-      return this.tsunamiRequestHandler.getInternalTransactions(criteria, {
-        ...rangeOptions,
-        timestamp_start: timestampStart,
-        timestamp_end: timestampEnd,
-      });
-    },
-
-    getByBlockHash: (
-      blockHash: string,
-      criteria: TsunamiInternalTransactionsCriteria,
-      abi?: any,
-      rangeOptions?: RangeOptions,
-    ) => {
-      if (abi) {
-        return this.tsunamiRequestHandler.getDecodedInternalTransactions(
-          criteria,
-          { ...rangeOptions, block_hash: blockHash },
-          abi,
-        );
-      }
-      return this.tsunamiRequestHandler.getInternalTransactions(criteria, {
-        ...rangeOptions,
-        block_hash: blockHash,
-      });
-    },
-  };
-
   public readonly transactions = {
     byAddress: {
       getByBlockNumber: (
