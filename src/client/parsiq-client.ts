@@ -6,10 +6,8 @@ import {
   TsunamiLog,
   TsunamiDecodedLog,
   TsunamiAbi,
-  TsunamiDecodingErrorLog,
   TsunamiInternalTransaction,
   TsunamiDecodedInternalTransaction,
-  TsunamiDecodingErrorInternalTransaction,
 } from '../dto/tsunami';
 import { AxiosRequestConfig } from 'axios';
 import { IAxiosRetryConfig } from 'axios-retry';
@@ -370,7 +368,7 @@ class ParsiqClient {
     criteria: TsunamiLogsCriteria,
     abi: TsunamiAbi,
     rangeOptions?: RangeOptions,
-  ): AsyncGenerator<TsunamiDecodedLog | TsunamiDecodingErrorLog, void, undefined>;
+  ): AsyncGenerator<TsunamiDecodedLog, void, undefined>;
 
   private getLogsByTimestamp(
     timestampStart: number,
@@ -405,7 +403,7 @@ class ParsiqClient {
     criteria: TsunamiLogsCriteria,
     abi: TsunamiAbi,
     rangeOptions?: RangeOptions,
-  ): AsyncGenerator<TsunamiDecodedLog | TsunamiDecodingErrorLog, void, undefined>;
+  ): AsyncGenerator<TsunamiDecodedLog, void, undefined>;
 
   private getLogsByBlockNumber(
     blockNumberStart: number,
@@ -438,7 +436,7 @@ class ParsiqClient {
     criteria: TsunamiLogsCriteria,
     abi: TsunamiAbi,
     rangeOptions?: RangeOptions,
-  ): AsyncGenerator<TsunamiDecodedLog | TsunamiDecodingErrorLog, void, unknown>;
+  ): AsyncGenerator<TsunamiDecodedLog, void, undefined>;
 
   private getLogsByBlockHash(
     blockHash: string,
@@ -471,7 +469,7 @@ class ParsiqClient {
     criteria: TsunamiInternalTransactionsCriteria,
     abi: TsunamiAbi,
     rangeOptions?: RangeOptions,
-  ): AsyncGenerator<TsunamiDecodedInternalTransaction | TsunamiDecodingErrorInternalTransaction, void, undefined>;
+  ): AsyncGenerator<TsunamiDecodedInternalTransaction, void, undefined>;
 
   private getInternalTransactionsByBlockNumber(
     blockNumberStart: number,
@@ -506,7 +504,7 @@ class ParsiqClient {
     criteria: TsunamiInternalTransactionsCriteria,
     abi: TsunamiAbi,
     rangeOptions?: RangeOptions,
-  ): AsyncGenerator<TsunamiDecodedInternalTransaction | TsunamiDecodingErrorInternalTransaction, void, undefined>;
+  ): AsyncGenerator<TsunamiDecodedInternalTransaction, void, undefined>;
 
   private getInternalTransactionsByTimestamp(
     timestampStart: number,
@@ -539,7 +537,7 @@ class ParsiqClient {
     criteria: TsunamiInternalTransactionsCriteria,
     abi: TsunamiAbi,
     rangeOptions?: RangeOptions,
-  ): AsyncGenerator<TsunamiDecodedInternalTransaction | TsunamiDecodingErrorInternalTransaction, void, undefined>;
+  ): AsyncGenerator<TsunamiDecodedInternalTransaction, void, undefined>;
 
   private getInternalTransactionsByBlockHash(
     blockHash: string,

@@ -13,7 +13,6 @@ import {
   TsunamiDataRangeOptions,
   TsunamiLog,
   TsunamiTransaction,
-  TsunamiTransactionInternals,
   TsunamiTransfer,
   TsunamiAbi,
 } from '../dto/tsunami';
@@ -178,9 +177,9 @@ export class TsunamiRequestHandler extends HttpClient {
     }
   }
 
-  async getTransactionInternals(transactionHash: string): Promise<TsunamiTransactionInternals> {
+  async getTransactionInternals(transactionHash: string): Promise<TsunamiTransaction> {
     try {
-      const response = await this.instance.get<TsunamiTransactionInternals>(`/txs/${transactionHash}/logs`);
+      const response = await this.instance.get<TsunamiTransaction>(`/txs/${transactionHash}/logs`);
       if (!response?.data) {
         throw new Error(MALFORMED_RESPONSE_MESSAGE);
       }
@@ -234,7 +233,7 @@ export class TsunamiRequestHandler extends HttpClient {
     address: string,
     criteria: TsunamiTransactionsCriteria,
     rangeOptions: TsunamiDataRangeOptions,
-  ): AsyncGenerator<TsunamiTransaction | TsunamiTransactionInternals, void, undefined> {
+  ): AsyncGenerator<TsunamiTransaction, void, undefined> {
     const stream = this.query<TsunamiTransaction>(`/address/${address}/txs`, criteria, rangeOptions);
 
     for await (const transactions of stream) {

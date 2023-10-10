@@ -8,8 +8,5 @@ export interface TsunamiTransaction {
   index?: number;
   gas_range?: number[];
   data?: object;
-}
-
-export interface TsunamiTransactionInternals extends TsunamiTransaction {
-  logs: readonly TsunamiTransactionLog[];
+  logs?: readonly TsunamiTransactionLog[];
 }

@@ -10,23 +10,9 @@ export interface TsunamiDecodedInternalTransaction {
   contract: string;
   value: string;
   sender: string;
-  decoded: { function: string; [k: string]: any };
+  decoded: { function: string; [k: string]: any } | null;
   events?: readonly TsunamiDecodedLogBelongingToInternalTransaction[];
-}
-
-export interface TsunamiDecodingErrorInternalTransaction {
-  id: string;
-  tx_hash: string;
-  block_hash: string;
-  block_number: number;
-  timestamp: number;
-  origin: string;
-  contract: string;
-  sig_hash: string;
-  input_data: string;
-  value: string;
-  sender: string;
-  events?: readonly TsunamiDecodedLogBelongingToInternalTransaction[];
-  error: string;
-  decoded: null; //TODO: it confirms to what we do in Tsunami, but it is really useless
+  sig_hash?: string;
+  input_data?: string;
+  error?: string;
 }

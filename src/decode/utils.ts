@@ -2,11 +2,8 @@ import {
   TsunamiDecodedLogBelongingToInternalTransaction,
   TsunamiDecodedInternalTransaction,
   TsunamiDecodedLog,
-  TsunamiDecodingErrorInternalTransaction,
-  TsunamiDecodingErrorLog,
   TsunamiInternalTransaction,
   TsunamiLog,
-  TsunamiDecodingErrorLogBelongingToInternalTransaction,
   TsunamiLogBelongingToInternalTransaction,
   TsunamiAbi,
 } from '../dto/tsunami';
@@ -14,7 +11,7 @@ import { Fragment, Indexed, Interface, ParamType, Result } from '@ethersproject/
 
 type ValueOrArray<T> = T | ValueOrArray<T>[];
 
-export const decodeTsunamiLog = (log: TsunamiLog, abi: TsunamiAbi): TsunamiDecodedLog | TsunamiDecodingErrorLog => {
+export const decodeTsunamiLog = (log: TsunamiLog, abi: TsunamiAbi): TsunamiDecodedLog => {
   let decoded: any | null;
   let error: string | null = null;
 
@@ -28,7 +25,7 @@ export const decodeTsunamiLog = (log: TsunamiLog, abi: TsunamiAbi): TsunamiDecod
       ...log,
       ...{ error },
       decoded: null,
-    } as TsunamiDecodingErrorLog;
+    } as TsunamiDecodedLog;
   }
   return {
     id: log.id,
@@ -46,7 +43,7 @@ export const decodeTsunamiLog = (log: TsunamiLog, abi: TsunamiAbi): TsunamiDecod
 export const decodeTsunamiLogForInternalTransaction = (
   log: TsunamiLogBelongingToInternalTransaction,
   abi: TsunamiAbi,
-): TsunamiDecodedLogBelongingToInternalTransaction | TsunamiDecodingErrorLogBelongingToInternalTransaction => {
+): TsunamiDecodedLogBelongingToInternalTransaction => {
   let decoded: any | null;
   let error: string | null = null;
 
@@ -60,7 +57,7 @@ export const decodeTsunamiLogForInternalTransaction = (
       ...log,
       ...{ error },
       decoded: null,
-    } as TsunamiDecodingErrorLogBelongingToInternalTransaction;
+    };
   }
   return {
     op_code: log.op_code,
@@ -72,7 +69,7 @@ export const decodeTsunamiLogForInternalTransaction = (
 export const decodeTsunamiInternalTransaction = (
   internalTransaction: TsunamiInternalTransaction,
   abi: TsunamiAbi,
-): TsunamiDecodedInternalTransaction | TsunamiDecodingErrorInternalTransaction => {
+): TsunamiDecodedInternalTransaction => {
   let decoded: any | null = null;
   let error: null | string = null;
 
@@ -95,13 +92,12 @@ export const decodeTsunamiInternalTransaction = (
   let events:
     | readonly (
         | TsunamiDecodedLogBelongingToInternalTransaction
-        | TsunamiDecodingErrorLogBelongingToInternalTransaction
       )[]
     | null = null;
   if (internalTransaction.events) {
     events = internalTransaction.events.map(event => {
       return decodeTsunamiLogForInternalTransaction(event, abi);
-    }); //this.getDecodedEvents(item.events, abi) as readonly DecodedHistoricalEventBelongingToCall[];
+    });
   }
   if (error) {
     return {
@@ -119,7 +115,7 @@ export const decodeTsunamiInternalTransaction = (
       ...(events ? { events } : {}),
       ...{ error },
       decoded: null,
-    } as TsunamiDecodingErrorInternalTransaction;
+    };
   }
 
   return {
@@ -149,7 +145,7 @@ const decodeTsunamiLogBasedData = (
     tsunamiLog.topic_1,
     tsunamiLog.topic_2,
     tsunamiLog.topic_3,
-  ]);
+  ].filter(topic => typeof topic === 'string') as string[]);
 
   return {
     event: eventFragment.name,
