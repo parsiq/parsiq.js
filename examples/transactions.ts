@@ -4,7 +4,7 @@ import {YOUR_API_KEY} from "./api-key";
 export async function runTransactions() {
     const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
-    for await (const transaction of client.transactions.byAddress.getByBlockNumber(
+    for await (const transaction of client.transactions.byAddress.getByBlockRange(
         '0x690B9A9E9aa1C9dB991C7721a92d351Db4FaC990',
         0,
         'latest',

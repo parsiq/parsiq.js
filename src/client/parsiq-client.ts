@@ -59,7 +59,7 @@ class ParsiqClient {
   }
 
   public readonly blocks = {
-    getByBlockNumber: (
+    getByBlockRange: (
       blockNumberStart: number,
       blockNumberEnd: number | typeof LATEST_TAG,
       rangeOptions?: Exact<RangeOptions>,
@@ -82,19 +82,19 @@ class ParsiqClient {
 
   public readonly logs = {
     getByTimestamp: this.getLogsByTimestamp.bind(this),
-    getByBlockNumber: this.getLogsByBlockNumber.bind(this),
+    getByBlockNumber: this.getLogsByBlockRange.bind(this),
     getByBlockHash: this.getLogsByBlockHash.bind(this),
   };
 
   public readonly internalTransactions = {
     getByTimestamp: this.getInternalTransactionsByTimestamp.bind(this),
-    getByBlockNumber: this.getInternalTransactionsByBlockNumber.bind(this),
+    getByBlockNumber: this.getInternalTransactionsByBlockRange.bind(this),
     getByBlockHash: this.getInternalTransactionsByBlockHash.bind(this),
   };
 
   public readonly transactions = {
     byAddress: {
-      getByBlockNumber: (
+      getByBlockRange: (
         address: string,
         blockNumberStart: number,
         blockNumberEnd: number | typeof LATEST_TAG,
@@ -395,13 +395,13 @@ class ParsiqClient {
     });
   }
 
-  private getLogsByBlockNumber(
+  private getLogsByBlockRange(
     blockNumberStart: number,
     blockNumberEnd: number | typeof LATEST_TAG,
     criteria: TsunamiLogsCriteria,
     rangeOptions?: RangeOptions,
   ): AsyncGenerator<TsunamiLog, void, undefined>;
-  private getLogsByBlockNumber(
+  private getLogsByBlockRange(
     blockNumberStart: number,
     blockNumberEnd: number | typeof LATEST_TAG,
     criteria: TsunamiLogsCriteria,
@@ -409,7 +409,7 @@ class ParsiqClient {
     rangeOptions?: RangeOptions,
   ): AsyncGenerator<TsunamiDecodedLog, void, undefined>;
 
-  private getLogsByBlockNumber(
+  private getLogsByBlockRange(
     blockNumberStart: number,
     blockNumberEnd: number | typeof LATEST_TAG,
     criteria: TsunamiLogsCriteria,
@@ -461,13 +461,13 @@ class ParsiqClient {
     return this.tsunamiRequestHandler.getLogs(criteria, { ...(abiOrRange as RangeOptions), block_hash: blockHash });
   }
 
-  private getInternalTransactionsByBlockNumber(
+  private getInternalTransactionsByBlockRange(
     blockNumberStart: number,
     blockNumberEnd: number | typeof LATEST_TAG,
     criteria: TsunamiInternalTransactionsCriteria,
     rangeOptions?: RangeOptions,
   ): AsyncGenerator<TsunamiInternalTransaction, void, undefined>;
-  private getInternalTransactionsByBlockNumber(
+  private getInternalTransactionsByBlockRange(
     blockNumberStart: number,
     blockNumberEnd: number | typeof LATEST_TAG,
     criteria: TsunamiInternalTransactionsCriteria,
@@ -475,7 +475,7 @@ class ParsiqClient {
     rangeOptions?: RangeOptions,
   ): AsyncGenerator<TsunamiDecodedInternalTransaction, void, undefined>;
 
-  private getInternalTransactionsByBlockNumber(
+  private getInternalTransactionsByBlockRange(
     blockNumberStart: number,
     blockNumberEnd: number | typeof LATEST_TAG,
     criteria: TsunamiInternalTransactionsCriteria,
