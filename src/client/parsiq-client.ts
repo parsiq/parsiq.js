@@ -59,7 +59,11 @@ class ParsiqClient {
   }
 
   public readonly blocks = {
-    getByBlockNumber: (blockNumberStart: number, blockNumberEnd: number, rangeOptions?: Exact<RangeOptions>) => {
+    getByBlockNumber: (
+      blockNumberStart: number,
+      blockNumberEnd: number | typeof LATEST_TAG,
+      rangeOptions?: Exact<RangeOptions>,
+    ) => {
       return this.tsunamiRequestHandler.getBlocksByNumber(blockNumberStart, blockNumberEnd, rangeOptions);
     },
 
@@ -164,7 +168,7 @@ class ParsiqClient {
         return this.tsunamiRequestHandler.getContractsCreations(criteria, {
           ...rangeOptions,
           timestamp_start: timestampStart,
-          block_number_end: timestampEnd,
+          timestamp_end: timestampEnd,
         });
       },
 
@@ -199,7 +203,7 @@ class ParsiqClient {
         return this.tsunamiRequestHandler.getContractsSelfDestructions(criteria, {
           ...rangeOptions,
           timestamp_start: timestampStart,
-          block_number_end: timestampEnd,
+          timestamp_end: timestampEnd,
         });
       },
 
@@ -238,7 +242,7 @@ class ParsiqClient {
         return this.tsunamiRequestHandler.getWalletTransfers(address, criteria, {
           ...rangeOptions,
           timestamp_start: timestampStart,
-          block_number_end: timestampEnd,
+          timestamp_end: timestampEnd,
         });
       },
 
@@ -279,7 +283,7 @@ class ParsiqClient {
         return this.tsunamiRequestHandler.getTokenTransfers(contract, criteria, {
           ...rangeOptions,
           timestamp_start: timestampStart,
-          block_number_end: timestampEnd,
+          timestamp_end: timestampEnd,
         });
       },
 

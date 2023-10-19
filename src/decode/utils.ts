@@ -89,11 +89,7 @@ export const decodeTsunamiInternalTransaction = (
     error = err?.message;
   }
 
-  let events:
-    | readonly (
-        | TsunamiDecodedLogBelongingToInternalTransaction
-      )[]
-    | null = null;
+  let events: readonly (TsunamiDecodedLogBelongingToInternalTransaction)[] | null = null;
   if (internalTransaction.events) {
     events = internalTransaction.events.map(event => {
       return decodeTsunamiLogForInternalTransaction(event, abi);
@@ -140,12 +136,13 @@ const decodeTsunamiLogBasedData = (
   const eventFragment = abiInterface.getEvent(tsunamiLog.topic_0 ?? '');
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-  const decoded = abiInterface.decodeEventLog(eventFragment, String(tsunamiLog.log_data ?? ''), [
-    tsunamiLog.topic_0,
-    tsunamiLog.topic_1,
-    tsunamiLog.topic_2,
-    tsunamiLog.topic_3,
-  ].filter(topic => typeof topic === 'string') as string[]);
+  const decoded = abiInterface.decodeEventLog(
+    eventFragment,
+    String(tsunamiLog.log_data ?? ''),
+    [tsunamiLog.topic_0, tsunamiLog.topic_1, tsunamiLog.topic_2, tsunamiLog.topic_3].filter(
+      topic => typeof topic === 'string',
+    ) as string[],
+  );
 
   return {
     event: eventFragment.name,

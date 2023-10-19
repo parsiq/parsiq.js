@@ -23,6 +23,7 @@ import { TSUNAMI_BASE_URL } from './urls';
 import * as Parsiq from './parsiq-client';
 import { RangeOptions } from '../dto/common';
 import { decodeTsunamiInternalTransaction, decodeTsunamiLog } from '../decode/utils';
+import { LATEST_TAG } from '../constants';
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed Tsunami response';
 const REQUEST_FAILED_MESSAGE = 'Tsunami request failed';
@@ -87,7 +88,7 @@ export class TsunamiRequestHandler extends HttpClient {
     }
   }
 
-  public async *getBlocksByNumber(start: number, end: number, rangeOptions?: RangeOptions) {
+  public async *getBlocksByNumber(start: number, end: number | typeof LATEST_TAG, rangeOptions?: RangeOptions) {
     const iterator = this.query<TsunamiBlock>(
       '/blocks',
       {},

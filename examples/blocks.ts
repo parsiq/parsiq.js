@@ -9,7 +9,8 @@ export async function runBlocks() {
 
     for await (const blockByBlockNumber of client.blocks.getByBlockNumber(
         0,
-        0
+        'latest',
+        {limit: 1}
     )) {
         console.log(`Block by number - ${JSON.stringify(blockByBlockNumber)}`, '\n')
     }
