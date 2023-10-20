@@ -82,13 +82,13 @@ class ParsiqClient {
 
   public readonly logs = {
     getByTimestamp: this.getLogsByTimestamp.bind(this),
-    getByBlockNumber: this.getLogsByBlockRange.bind(this),
+    getByBlockRange: this.getLogsByBlockRange.bind(this),
     getByBlockHash: this.getLogsByBlockHash.bind(this),
   };
 
   public readonly internalTransactions = {
     getByTimestamp: this.getInternalTransactionsByTimestamp.bind(this),
-    getByBlockNumber: this.getInternalTransactionsByBlockRange.bind(this),
+    getByBlockRange: this.getInternalTransactionsByBlockRange.bind(this),
     getByBlockHash: this.getInternalTransactionsByBlockHash.bind(this),
   };
 

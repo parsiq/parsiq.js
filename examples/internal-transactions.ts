@@ -5,7 +5,7 @@ import {ABI, CORRUPTED_ABI} from "./abi-example";
 export async function runInternalTransactions() {
     const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
-    for await (const internalTransaction of client.internalTransactions.getByBlockNumber(
+    for await (const internalTransaction of client.internalTransactions.getByBlockRange(
         0,
         'latest',
         {contract: ['0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0'], include_events: true},
@@ -14,7 +14,7 @@ export async function runInternalTransactions() {
         console.log(`Tsunami internal transaction - ${JSON.stringify(internalTransaction)}`, '\n');
     }
 
-    for await (const decodedInternalTransaction of client.internalTransactions.getByBlockNumber(
+    for await (const decodedInternalTransaction of client.internalTransactions.getByBlockRange(
         0,
         'latest',
         {contract: ['0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0'], include_events: true},
@@ -23,7 +23,7 @@ export async function runInternalTransactions() {
         console.log(`Client side decoded tsunami internal transaction - ${JSON.stringify(decodedInternalTransaction)}`, '\n');
     }
 
-    for await (const decodedInternalTransaction of client.internalTransactions.getByBlockNumber(
+    for await (const decodedInternalTransaction of client.internalTransactions.getByBlockRange(
         0,
         'latest',
         {contract: ['0x7D1AfA7B718fb893dB30A3aBc0Cfc608AaCfeBB0'], include_events: true},
