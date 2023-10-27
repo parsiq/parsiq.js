@@ -1,6 +1,6 @@
 {
   "name": "@parsiq/parsiq.js",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,12 +26,12 @@
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git+ssh://git@github.com:parsiq/parsiq.js.git"
   },
   "bugs": {
-    "url": "https://gitlab.com/parsiqio/next/parsiq.js/issues"
+    "url": "https://github.com/parsiq/parsiq.js/issues"
   },
-  "homepage": "https://gitlab.com/parsiqio/next/parsiq.js#readme",
+  "homepage": "https://github.com/parsiq/parsiq.js/blob/master/README.md",
   "keywords": [
     "blockhain",
     "blockhain api",
