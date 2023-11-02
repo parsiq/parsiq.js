@@ -37,7 +37,7 @@ console.log((await client.blocks.getLatest()).number);
 Fetch logs:
 
 ```typescript
-for await (const log of client.logs.getByBlockNumber(
+for await (const log of client.logs.getByBlockRange(
     0,
     'latest',
     { contract: ['0x1e2fbe6be9eb39fc894d38be976111f332172d83'] },
