@@ -1,10 +1,10 @@
 import { HttpClient } from './http-client';
 import * as Parsiq from './parsiq-client';
-import { AxiosRequestConfig, isAxiosError } from 'axios/index';
+import { AxiosRequestConfig, isAxiosError } from 'axios';
 import { IAxiosRetryConfig } from 'axios-retry';
 import { WEB_3_HOOKS_BASE_URL } from './urls';
-import { CreateHook } from '../dto/web3-hooks';
 import { TsunamiError } from './tsunami-error';
+import { CreateHook } from '../dto/web3-hooks';
 
 export class Web3HooksRequestHandler extends HttpClient {
   constructor(
