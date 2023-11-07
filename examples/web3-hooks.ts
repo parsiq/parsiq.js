@@ -17,6 +17,8 @@ export async function runWeb3Hooks() {
     filter_type: 'calls',
     name: 'test', description: 'transfers', endpoint_url: 'https://webhook.site/44ba3b7a-f109-47a1-a96e-638b28dd7b2b'
   })
+
+  console.log(`New filter id: ${id}`);
 }
 
 runWeb3Hooks();
