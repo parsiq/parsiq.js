@@ -20,6 +20,8 @@ import { NftSupplementalDataCriteria, NftContractCriteria } from '../dto/nft-api
 import { BalancesRequestHandler } from './balances-request-handler';
 import { RangeOptions } from '../dto/common';
 import { Exact } from '../utils';
+import { CreateHook } from '../dto/web3-hooks';
+import { Web3HooksRequestHandler } from './web3hooks-request-handler';
 
 export enum ChainId {
   ETH_MAINNET = 'eip155-1', // Eth Mainnet
@@ -56,7 +58,14 @@ class ParsiqClient {
     this.tsunamiRequestHandler = new TsunamiRequestHandler(apiKey, chain, config);
     this.nftRequestHandler = new NftRequestHandler(apiKey, chain, config);
     this.balancesRequestHandler = new BalancesRequestHandler(apiKey, chain, config);
+    this.web3HooksRequestHandler = new Web3HooksRequestHandler(apiKey, chain, config);
   }
+
+  public readonly web3hooks = {
+    create: (createHook: CreateHook) => {
+      return this.web3HooksRequestHandler.createHook(createHook);
+    },
+  };
 
   public readonly blocks = {
     getByBlockRange: (
@@ -349,6 +358,7 @@ class ParsiqClient {
   private readonly tsunamiRequestHandler: TsunamiRequestHandler;
   private readonly nftRequestHandler: NftRequestHandler;
   private readonly balancesRequestHandler: BalancesRequestHandler;
+  private readonly web3HooksRequestHandler: Web3HooksRequestHandler;
 
   public setChain(chainId: ChainId) {
     this.tsunamiRequestHandler.setChain(chainId);
