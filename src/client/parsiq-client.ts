@@ -65,6 +65,14 @@ class ParsiqClient {
     create: (createHook: CreateHook) => {
       return this.web3HooksRequestHandler.createHook(createHook);
     },
+
+    list: () => {
+      return this.web3HooksRequestHandler.listHooks();
+    },
+
+    delete: (id: string) => {
+      return this.web3HooksRequestHandler.delete(id);
+    },
   };
 
   public readonly blocks = {

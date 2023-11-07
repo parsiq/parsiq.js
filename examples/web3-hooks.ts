@@ -19,6 +19,14 @@ export async function runWeb3Hooks() {
   })
 
   console.log(`New filter id: ${id}`);
+
+  const hooks = await client.web3hooks.list();
+  console.log(`Total of ${hooks.length} hook(s)`)
+  for(const hook of hooks) {
+    console.log(JSON.stringify(hook));
+  }
+
+  await client.web3hooks.delete(id);
 }
 
 runWeb3Hooks();

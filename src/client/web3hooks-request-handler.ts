@@ -4,7 +4,7 @@ import { AxiosRequestConfig, isAxiosError } from 'axios';
 import { IAxiosRetryConfig } from 'axios-retry';
 import { TSUNAMI_BASE_URL } from './urls';
 import { TsunamiError } from './tsunami-error';
-import { CreateHook } from '../dto/web3-hooks';
+import { CreateHook, Web3HookData } from '../dto/web3-hooks';
 
 export class Web3HooksRequestHandler extends HttpClient {
   constructor(
@@ -32,5 +32,18 @@ export class Web3HooksRequestHandler extends HttpClient {
       throw new TsunamiError("Couldn't create filter", null, null, error);
     });
     return response.data.id;
+  }
+
+  public async listHooks(): Promise<Web3HookData[]> {
+    const response = await this.instance.get<Web3HookData[]>('/filters', {}).catch(error => {
+      throw this.getRequestProcessingError(error);
+    });
+    return response.data;
+  }
+
+  public async delete(id: string): Promise<void> {
+    await this.instance.delete<Web3HookData[]>(`/filters/${id}`, {}).catch(error => {
+      throw this.getRequestProcessingError(error);
+    });
   }
 }
