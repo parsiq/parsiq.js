@@ -70,6 +70,10 @@ class ParsiqClient {
       return this.web3HooksRequestHandler.listHooks();
     },
 
+    show: (id: string) => {
+      return this.web3HooksRequestHandler.showHook(id);
+    },
+
     delete: (id: string) => {
       return this.web3HooksRequestHandler.delete(id);
     },

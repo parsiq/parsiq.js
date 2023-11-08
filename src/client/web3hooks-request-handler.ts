@@ -41,6 +41,13 @@ export class Web3HooksRequestHandler extends HttpClient {
     return response.data;
   }
 
+  public async showHook(id: string): Promise<Web3HookData> {
+    const response = await this.instance.get<Web3HookData>(`/filters/${id}`, {}).catch(error => {
+      throw this.getRequestProcessingError(error);
+    });
+    return response.data;
+  }
+
   public async delete(id: string): Promise<void> {
     await this.instance.delete<Web3HookData[]>(`/filters/${id}`, {}).catch(error => {
       throw this.getRequestProcessingError(error);

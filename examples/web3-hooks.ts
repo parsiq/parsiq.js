@@ -20,6 +20,9 @@ export async function runWeb3Hooks() {
 
   console.log(`New filter id: ${id}`);
 
+  const newHook = await client.web3hooks.show(id);
+  console.log(`Newly created hook: ${JSON.stringify(newHook)}`);
+
   const hooks = await client.web3hooks.list();
   console.log(`Total of ${hooks.length} hook(s)`)
   for(const hook of hooks) {
