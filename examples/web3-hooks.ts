@@ -10,12 +10,12 @@ export async function runWeb3Hooks() {
     endpoint_auth: {
       type: HttpAuthType.basic,
       credentials: {
-        username: "eugene",
+        username: "qwerty",
         password: "qwerty"
       },
     },
     filter_type: 'calls',
-    name: 'test', description: 'transfers', endpoint_url: 'https://webhook.site/44ba3b7a-f109-47a1-a96e-638b28dd7b2b'
+    name: 'test', description: 'transfers', endpoint_url: 'https://webhook.site/44ba3b7a-f109-47a1-a96e-638b28dd7b2a'
   })
 
   console.log(`New filter id: ${id}`);

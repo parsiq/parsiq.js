@@ -22,6 +22,8 @@ import { RangeOptions } from '../dto/common';
 import { Exact } from '../utils';
 import { CreateHook } from '../dto/web3-hooks';
 import { Web3HooksRequestHandler } from './web3hooks-request-handler';
+import { TransactionLifecycleRequestHandler } from './transaction-lifecycle-request-handler';
+import { CreateTransactionLifecycle } from '../dto/transaction-lifecycle';
 
 export enum ChainId {
   ETH_MAINNET = 'eip155-1', // Eth Mainnet
@@ -59,7 +61,26 @@ class ParsiqClient {
     this.nftRequestHandler = new NftRequestHandler(apiKey, chain, config);
     this.balancesRequestHandler = new BalancesRequestHandler(apiKey, chain, config);
     this.web3HooksRequestHandler = new Web3HooksRequestHandler(apiKey, chain, config);
+    this.transactionLifecycleRequestHandler = new TransactionLifecycleRequestHandler(apiKey, chain, config);
   }
+
+  public readonly txLifecycle = {
+    create: (createTransactionLifecycle: CreateTransactionLifecycle) => {
+      return this.transactionLifecycleRequestHandler.createTransactionLifecycle(createTransactionLifecycle);
+    },
+
+    list: () => {
+      return this.transactionLifecycleRequestHandler.listTransactionLifecycles();
+    },
+
+    show: (id: string) => {
+      return this.transactionLifecycleRequestHandler.showTransactionLifecycle(id);
+    },
+
+    delete: (id: string) => {
+      return this.transactionLifecycleRequestHandler.delete(id);
+    },
+  };
 
   public readonly web3hooks = {
     create: (createHook: CreateHook) => {
@@ -371,11 +392,14 @@ class ParsiqClient {
   private readonly nftRequestHandler: NftRequestHandler;
   private readonly balancesRequestHandler: BalancesRequestHandler;
   private readonly web3HooksRequestHandler: Web3HooksRequestHandler;
+  private readonly transactionLifecycleRequestHandler: TransactionLifecycleRequestHandler;
 
   public setChain(chainId: ChainId) {
     this.tsunamiRequestHandler.setChain(chainId);
     this.nftRequestHandler.setChain(chainId);
     this.balancesRequestHandler.setChain(chainId);
+    this.web3HooksRequestHandler.setChain(chainId);
+    this.web3HooksRequestHandler.setChain(chainId);
   }
 
   private isTsunamiAbi(value: any): value is TsunamiAbi {
