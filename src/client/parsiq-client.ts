@@ -399,7 +399,7 @@ class ParsiqClient {
     this.nftRequestHandler.setChain(chainId);
     this.balancesRequestHandler.setChain(chainId);
     this.web3HooksRequestHandler.setChain(chainId);
-    this.web3HooksRequestHandler.setChain(chainId);
+    this.transactionLifecycleRequestHandler.setChain(chainId);
   }
 
   private isTsunamiAbi(value: any): value is TsunamiAbi {
