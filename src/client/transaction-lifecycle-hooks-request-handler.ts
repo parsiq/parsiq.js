@@ -6,7 +6,7 @@ import { TSUNAMI_BASE_URL } from './urls';
 import { TsunamiError } from './tsunami-error';
 import { CreateTransactionLifecycle, TransactionLifecycleData } from '../dto/transaction-lifecycle';
 
-export class TransactionLifecycleRequestHandler extends HttpClient {
+export class TransactionLifecycleHooksRequestHandler extends HttpClient {
   constructor(
     apiKey: string,
     chain: Parsiq.ChainId,
@@ -19,7 +19,7 @@ export class TransactionLifecycleRequestHandler extends HttpClient {
     super(TSUNAMI_BASE_URL, chain, apiKey, axiosConfig, retryConfig);
   }
 
-  public async createTransactionLifecycle(createHook: CreateTransactionLifecycle): Promise<string> {
+  public async createTxLcHook(createHook: CreateTransactionLifecycle): Promise<string> {
     const response = await this.instance.post<{ id: string }>('/transaction-lifecycle', createHook, {}).catch(error => {
       if (isAxiosError(error)) {
         throw new TsunamiError(
@@ -34,14 +34,14 @@ export class TransactionLifecycleRequestHandler extends HttpClient {
     return response.data.id;
   }
 
-  public async listTransactionLifecycles(): Promise<TransactionLifecycleData[]> {
+  public async listTxLcHooks(): Promise<TransactionLifecycleData[]> {
     const response = await this.instance.get<TransactionLifecycleData[]>('/transaction-lifecycle', {}).catch(error => {
       throw this.getRequestProcessingError(error);
     });
     return response.data;
   }
 
-  public async showTransactionLifecycle(id: string): Promise<TransactionLifecycleData> {
+  public async getTxLcHook(id: string): Promise<TransactionLifecycleData> {
     const response = await this.instance
       .get<TransactionLifecycleData>(`/transaction-lifecycle/${id}`, {})
       .catch(error => {
@@ -50,7 +50,7 @@ export class TransactionLifecycleRequestHandler extends HttpClient {
     return response.data;
   }
 
-  public async delete(id: string): Promise<void> {
+  public async deleteTxLcHook(id: string): Promise<void> {
     await this.instance.delete<TransactionLifecycleData[]>(`/transaction-lifecycle/${id}`, {}).catch(error => {
       throw this.getRequestProcessingError(error);
     });

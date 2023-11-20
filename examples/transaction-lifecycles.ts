@@ -5,7 +5,7 @@ import { HttpAuthType } from "../src";
 export async function runTransactionLifecycles() {
   const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
-  const id = await client.txLifecycle.create({
+  const id = await client.txLifecycleHooks.create({
     endpoint_auth: {
       type: HttpAuthType.basic,
       credentials: {
@@ -20,16 +20,16 @@ export async function runTransactionLifecycles() {
 
   console.log(`New transaction lifecycle id: ${id}`);
 
-  const newHook = await client.txLifecycle.show(id);
+  const newHook = await client.txLifecycleHooks.get(id);
   console.log(`Newly created transaction lifecycle: ${JSON.stringify(newHook)}`);
 
-  const hooks = await client.txLifecycle.list();
+  const hooks = await client.txLifecycleHooks.list();
   console.log(`Total of ${hooks.length} transaction lifecycle(s)`)
   for(const hook of hooks) {
     console.log(JSON.stringify(hook));
   }
 
-  await client.txLifecycle.delete(id);
+  await client.txLifecycleHooks.delete(id);
 }
 
 runTransactionLifecycles();

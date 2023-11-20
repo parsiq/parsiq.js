@@ -19,7 +19,7 @@ export class Web3HooksRequestHandler extends HttpClient {
     super(TSUNAMI_BASE_URL, chain, apiKey, axiosConfig, retryConfig);
   }
 
-  public async createHook(createHook: CreateHook): Promise<string> {
+  public async createWeb3Hook(createHook: CreateHook): Promise<string> {
     const response = await this.instance.post<{ id: string }>('/filters', createHook, {}).catch(error => {
       if (isAxiosError(error)) {
         throw new TsunamiError(
@@ -34,21 +34,21 @@ export class Web3HooksRequestHandler extends HttpClient {
     return response.data.id;
   }
 
-  public async listHooks(): Promise<Web3HookData[]> {
+  public async listWeb3Hooks(): Promise<Web3HookData[]> {
     const response = await this.instance.get<Web3HookData[]>('/filters', {}).catch(error => {
       throw this.getRequestProcessingError(error);
     });
     return response.data;
   }
 
-  public async showHook(id: string): Promise<Web3HookData> {
+  public async getWeb3Hook(id: string): Promise<Web3HookData> {
     const response = await this.instance.get<Web3HookData>(`/filters/${id}`, {}).catch(error => {
       throw this.getRequestProcessingError(error);
     });
     return response.data;
   }
 
-  public async delete(id: string): Promise<void> {
+  public async deleteWeb3Hook(id: string): Promise<void> {
     await this.instance.delete<Web3HookData[]>(`/filters/${id}`, {}).catch(error => {
       throw this.getRequestProcessingError(error);
     });

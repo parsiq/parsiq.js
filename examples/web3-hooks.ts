@@ -5,7 +5,7 @@ import { HttpAuthType } from "../src";
 export async function runWeb3Hooks() {
   const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
-  const id = await client.web3hooks.create({
+  const id = await client.web3Hooks.create({
     criteria: { sender: '0x3ab96d0a0d7921dfe542af8081c0f1bc21429893' },
     endpoint_auth: {
       type: HttpAuthType.basic,
@@ -20,16 +20,16 @@ export async function runWeb3Hooks() {
 
   console.log(`New filter id: ${id}`);
 
-  const newHook = await client.web3hooks.show(id);
+  const newHook = await client.web3Hooks.get(id);
   console.log(`Newly created hook: ${JSON.stringify(newHook)}`);
 
-  const hooks = await client.web3hooks.list();
+  const hooks = await client.web3Hooks.list();
   console.log(`Total of ${hooks.length} hook(s)`)
   for(const hook of hooks) {
     console.log(JSON.stringify(hook));
   }
 
-  await client.web3hooks.delete(id);
+  await client.web3Hooks.delete(id);
 }
 
 runWeb3Hooks();

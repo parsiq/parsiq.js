@@ -22,7 +22,7 @@ import { RangeOptions } from '../dto/common';
 import { Exact } from '../utils';
 import { CreateHook } from '../dto/web3-hooks';
 import { Web3HooksRequestHandler } from './web3hooks-request-handler';
-import { TransactionLifecycleRequestHandler } from './transaction-lifecycle-request-handler';
+import { TransactionLifecycleHooksRequestHandler } from './transaction-lifecycle-hooks-request-handler';
 import { CreateTransactionLifecycle } from '../dto/transaction-lifecycle';
 
 export enum ChainId {
@@ -61,42 +61,42 @@ class ParsiqClient {
     this.nftRequestHandler = new NftRequestHandler(apiKey, chain, config);
     this.balancesRequestHandler = new BalancesRequestHandler(apiKey, chain, config);
     this.web3HooksRequestHandler = new Web3HooksRequestHandler(apiKey, chain, config);
-    this.transactionLifecycleRequestHandler = new TransactionLifecycleRequestHandler(apiKey, chain, config);
+    this.transactionLifecycleRequestHandler = new TransactionLifecycleHooksRequestHandler(apiKey, chain, config);
   }
 
-  public readonly txLifecycle = {
+  public readonly txLifecycleHooks = {
     create: (createTransactionLifecycle: CreateTransactionLifecycle) => {
-      return this.transactionLifecycleRequestHandler.createTransactionLifecycle(createTransactionLifecycle);
+      return this.transactionLifecycleRequestHandler.createTxLcHook(createTransactionLifecycle);
     },
 
     list: () => {
-      return this.transactionLifecycleRequestHandler.listTransactionLifecycles();
+      return this.transactionLifecycleRequestHandler.listTxLcHooks();
     },
 
-    show: (id: string) => {
-      return this.transactionLifecycleRequestHandler.showTransactionLifecycle(id);
+    get: (id: string) => {
+      return this.transactionLifecycleRequestHandler.getTxLcHook(id);
     },
 
     delete: (id: string) => {
-      return this.transactionLifecycleRequestHandler.delete(id);
+      return this.transactionLifecycleRequestHandler.deleteTxLcHook(id);
     },
   };
 
-  public readonly web3hooks = {
+  public readonly web3Hooks = {
     create: (createHook: CreateHook) => {
-      return this.web3HooksRequestHandler.createHook(createHook);
+      return this.web3HooksRequestHandler.createWeb3Hook(createHook);
     },
 
     list: () => {
-      return this.web3HooksRequestHandler.listHooks();
+      return this.web3HooksRequestHandler.listWeb3Hooks();
     },
 
-    show: (id: string) => {
-      return this.web3HooksRequestHandler.showHook(id);
+    get: (id: string) => {
+      return this.web3HooksRequestHandler.getWeb3Hook(id);
     },
 
     delete: (id: string) => {
-      return this.web3HooksRequestHandler.delete(id);
+      return this.web3HooksRequestHandler.deleteWeb3Hook(id);
     },
   };
 
@@ -392,7 +392,7 @@ class ParsiqClient {
   private readonly nftRequestHandler: NftRequestHandler;
   private readonly balancesRequestHandler: BalancesRequestHandler;
   private readonly web3HooksRequestHandler: Web3HooksRequestHandler;
-  private readonly transactionLifecycleRequestHandler: TransactionLifecycleRequestHandler;
+  private readonly transactionLifecycleRequestHandler: TransactionLifecycleHooksRequestHandler;
 
   public setChain(chainId: ChainId) {
     this.tsunamiRequestHandler.setChain(chainId);
