@@ -22,6 +22,8 @@ import { RangeOptions } from '../dto/common';
 import { Exact } from '../utils';
 import { CreateHook } from '../dto/web3-hooks';
 import { Web3HooksRequestHandler } from './web3hooks-request-handler';
+import { TransactionLifecycleHooksRequestHandler } from './transaction-lifecycle-hooks-request-handler';
+import { CreateTransactionLifecycle } from '../dto/transaction-lifecycle';
 
 export enum ChainId {
   ETH_MAINNET = 'eip155-1', // Eth Mainnet
@@ -59,23 +61,42 @@ class ParsiqClient {
     this.nftRequestHandler = new NftRequestHandler(apiKey, chain, config);
     this.balancesRequestHandler = new BalancesRequestHandler(apiKey, chain, config);
     this.web3HooksRequestHandler = new Web3HooksRequestHandler(apiKey, chain, config);
+    this.transactionLifecycleRequestHandler = new TransactionLifecycleHooksRequestHandler(apiKey, chain, config);
   }
 
-  public readonly web3hooks = {
-    create: (createHook: CreateHook) => {
-      return this.web3HooksRequestHandler.createHook(createHook);
+  public readonly txLifecycleHooks = {
+    create: (createTransactionLifecycle: CreateTransactionLifecycle) => {
+      return this.transactionLifecycleRequestHandler.createTxLcHook(createTransactionLifecycle);
     },
 
     list: () => {
-      return this.web3HooksRequestHandler.listHooks();
+      return this.transactionLifecycleRequestHandler.listTxLcHooks();
     },
 
-    show: (id: string) => {
-      return this.web3HooksRequestHandler.showHook(id);
+    get: (id: string) => {
+      return this.transactionLifecycleRequestHandler.getTxLcHook(id);
     },
 
     delete: (id: string) => {
-      return this.web3HooksRequestHandler.delete(id);
+      return this.transactionLifecycleRequestHandler.deleteTxLcHook(id);
+    },
+  };
+
+  public readonly web3Hooks = {
+    create: (createHook: CreateHook) => {
+      return this.web3HooksRequestHandler.createWeb3Hook(createHook);
+    },
+
+    list: () => {
+      return this.web3HooksRequestHandler.listWeb3Hooks();
+    },
+
+    get: (id: string) => {
+      return this.web3HooksRequestHandler.getWeb3Hook(id);
+    },
+
+    delete: (id: string) => {
+      return this.web3HooksRequestHandler.deleteWeb3Hook(id);
     },
   };
 
@@ -371,11 +392,14 @@ class ParsiqClient {
   private readonly nftRequestHandler: NftRequestHandler;
   private readonly balancesRequestHandler: BalancesRequestHandler;
   private readonly web3HooksRequestHandler: Web3HooksRequestHandler;
+  private readonly transactionLifecycleRequestHandler: TransactionLifecycleHooksRequestHandler;
 
   public setChain(chainId: ChainId) {
     this.tsunamiRequestHandler.setChain(chainId);
     this.nftRequestHandler.setChain(chainId);
     this.balancesRequestHandler.setChain(chainId);
+    this.web3HooksRequestHandler.setChain(chainId);
+    this.transactionLifecycleRequestHandler.setChain(chainId);
   }
 
   private isTsunamiAbi(value: any): value is TsunamiAbi {

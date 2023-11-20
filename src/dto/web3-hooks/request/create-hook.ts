@@ -1,5 +1,5 @@
 import { TsunamiInternalTransactionsCriteria, TsunamiLogsCriteria } from '../../tsunami';
-import { DeliveryAuth } from './delivery-auth';
+import { DeliveryAuth } from '../../common';
 
 export interface CreateHook {
   name: string;
