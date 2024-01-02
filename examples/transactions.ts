@@ -14,7 +14,7 @@ export async function runTransactions() {
         console.log(`Transaction - ${JSON.stringify(transaction)}`, '\n');
     }
 
-    const transactionInternals = await client.transactions.getTransactionInternals('0x83c9fb2a58546693ee4e29554789c164c9ec30d6218cffbbd800a248f7b399bf');
+    const transactionInternals = await client.transactions.getTransactionInternals('0xdc85aff5829fb1db3640e9c153ec7582c378ca2ff17b152450039b5692dac884', {include_failed_calls: true});
     console.log(`Transaction with logs - ${JSON.stringify(transactionInternals)}`, '\n');
 
 }
