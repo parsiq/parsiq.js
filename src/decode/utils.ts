@@ -89,7 +89,7 @@ export const decodeTsunamiInternalTransaction = (
     error = err?.message;
   }
 
-  let events: readonly (TsunamiDecodedLogBelongingToInternalTransaction)[] | null = null;
+  let events: readonly TsunamiDecodedLogBelongingToInternalTransaction[] | null = null;
   if (internalTransaction.events) {
     events = internalTransaction.events.map(event => {
       return decodeTsunamiLogForInternalTransaction(event, abi);

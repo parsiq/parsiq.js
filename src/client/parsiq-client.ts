@@ -8,6 +8,7 @@ import {
   TsunamiAbi,
   TsunamiInternalTransaction,
   TsunamiDecodedInternalTransaction,
+  TsunamiTransactionInternalsCriteria,
 } from '../dto/tsunami';
 import { AxiosRequestConfig } from 'axios';
 import { IAxiosRetryConfig } from 'axios-retry';
@@ -181,8 +182,8 @@ class ParsiqClient {
       return this.tsunamiRequestHandler.getTransaction(transactionHash);
     },
 
-    getTransactionInternals: (transactionHash: string) => {
-      return this.tsunamiRequestHandler.getTransactionInternals(transactionHash);
+    getTransactionInternals: (transactionHash: string, criteria?: TsunamiTransactionInternalsCriteria) => {
+      return this.tsunamiRequestHandler.getTransactionInternals(transactionHash, criteria);
     },
   };
 

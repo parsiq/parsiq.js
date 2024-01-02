@@ -15,6 +15,7 @@ import {
   TsunamiTransaction,
   TsunamiTransfer,
   TsunamiAbi,
+  TsunamiTransactionInternalsCriteria,
 } from '../dto/tsunami';
 import { TsunamiError } from './tsunami-error';
 import { TsunamiTransfersCriteria } from '../dto/tsunami/request/tsunami-transfers-criteria';
@@ -24,6 +25,7 @@ import * as Parsiq from './parsiq-client';
 import { RangeOptions } from '../dto/common';
 import { decodeTsunamiInternalTransaction, decodeTsunamiLog } from '../decode/utils';
 import { LATEST_TAG } from '../constants';
+import { convertForRequest } from './convertor';
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed Tsunami response';
 const REQUEST_FAILED_MESSAGE = 'Tsunami request failed';
@@ -178,9 +180,17 @@ export class TsunamiRequestHandler extends HttpClient {
     }
   }
 
-  async getTransactionInternals(transactionHash: string): Promise<TsunamiTransaction> {
+  async getTransactionInternals(
+    transactionHash: string,
+    criteria?: TsunamiTransactionInternalsCriteria,
+  ): Promise<TsunamiTransaction> {
     try {
-      const response = await this.instance.get<TsunamiTransaction>(`/txs/${transactionHash}/logs`);
+      const params = criteria
+        ? {
+            ...convertForRequest(criteria),
+          }
+        : {};
+      const response = await this.instance.get<TsunamiTransaction>(`/txs/${transactionHash}/logs`, { params });
       if (!response?.data) {
         throw new Error(MALFORMED_RESPONSE_MESSAGE);
       }
