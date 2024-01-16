@@ -19,7 +19,7 @@ import { TsunamiTransfersCriteria } from '../dto/tsunami/request/tsunami-transfe
 import { NftRequestHandler } from './nft-request-handler';
 import { NftSupplementalDataCriteria, NftContractCriteria } from '../dto/nft-api';
 import { BalancesRequestHandler } from './balances-request-handler';
-import { RangeOptions } from '../dto/common';
+import { ExportRangeOptions, RangeOptions } from '../dto/common';
 import { Exact } from '../utils';
 import { CreateHook } from '../dto/web3-hooks';
 import { Web3HooksRequestHandler } from './web3hooks-request-handler';
@@ -127,6 +127,36 @@ class ParsiqClient {
     getByTimestamp: this.getLogsByTimestamp.bind(this),
     getByBlockRange: this.getLogsByBlockRange.bind(this),
     getByBlockHash: this.getLogsByBlockHash.bind(this),
+  };
+
+  public readonly csvExport = {
+    getByBlockRange: (
+      blockNumberStart: number,
+      blockNumberEnd: number | typeof LATEST_TAG,
+      criteria: TsunamiLogsCriteria,
+      rangeOptions?: ExportRangeOptions,
+    ) => {
+      return this.tsunamiRequestHandler.getCsvStream(criteria, {
+        block_number_start: blockNumberStart,
+        block_number_end: blockNumberEnd,
+        ...rangeOptions,
+      });
+    },
+
+    getByTimestamp: (start: number, end: number, criteria: TsunamiLogsCriteria, rangeOptions?: ExportRangeOptions) => {
+      return this.tsunamiRequestHandler.getCsvStream(criteria, {
+        timestamp_start: start,
+        timestamp_end: end,
+        ...rangeOptions,
+      });
+    },
+
+    getByBlockHash: (hash: string, criteria: TsunamiLogsCriteria, rangeOptions?: ExportRangeOptions) => {
+      return this.tsunamiRequestHandler.getCsvStream(criteria, {
+        block_hash: hash,
+        ...rangeOptions,
+      });
+    },
   };
 
   public readonly internalTransactions = {
