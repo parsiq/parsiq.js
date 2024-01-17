@@ -4,7 +4,7 @@ import {YOUR_API_KEY} from "./api-key";
 export async function runCsvExport() {
   const client = Parsiq.createClient(YOUR_API_KEY, Parsiq.ChainId.ETH_MAINNET);
 
-  const stream = await client.csvExport.getByBlockRange(18926000, 18926175, {topic_0: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'], contract: ['0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984']});
+  const stream = await client.logs.csvExport.getByBlockRange(18926000, 18926175, {topic_0: ['0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'], contract: ['0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984']});
 
   let buffer = '';
 
