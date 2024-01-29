@@ -1,5 +1,5 @@
 import { HttpClient } from './http-client';
-import { AxiosRequestConfig, HttpStatusCode, isAxiosError } from 'axios';
+import { AxiosRequestConfig, AxiosResponse, HttpStatusCode, isAxiosError } from 'axios';
 import { IAxiosRetryConfig } from 'axios-retry';
 import {
   TsunamiContractCreationCriteria,
@@ -16,6 +16,7 @@ import {
   TsunamiTransfer,
   TsunamiAbi,
   TsunamiTransactionInternalsCriteria,
+  TsunamiStreamRangeOptions,
 } from '../dto/tsunami';
 import { TsunamiError } from './tsunami-error';
 import { TsunamiTransfersCriteria } from '../dto/tsunami/request/tsunami-transfers-criteria';
@@ -26,6 +27,7 @@ import { RangeOptions } from '../dto/common';
 import { decodeTsunamiInternalTransaction, decodeTsunamiLog } from '../decode/utils';
 import { LATEST_TAG } from '../constants';
 import { convertForRequest } from './convertor';
+import { Readable } from 'stream';
 
 const MALFORMED_RESPONSE_MESSAGE = 'Malformed Tsunami response';
 const REQUEST_FAILED_MESSAGE = 'Tsunami request failed';
@@ -272,5 +274,19 @@ export class TsunamiRequestHandler extends HttpClient {
     for await (const create of stream) {
       yield* create;
     }
+  }
+
+  async getCsvStream(criteria: TsunamiLogsCriteria, rangeOptions: TsunamiStreamRangeOptions) {
+    const params = {
+      ...rangeOptions,
+      ...convertForRequest(criteria),
+    };
+    const response: AxiosResponse = await this.instance.get('/csv-exports/events', {
+      params,
+      responseType: 'stream',
+    });
+
+    // Return the stream
+    return response.data as Readable;
   }
 }
