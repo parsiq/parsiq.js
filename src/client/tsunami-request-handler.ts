@@ -17,6 +17,7 @@ import {
   TsunamiAbi,
   TsunamiTransactionInternalsCriteria,
   TsunamiStreamRangeOptions,
+  TsunamiWalletTransferCriteria,
 } from '../dto/tsunami';
 import { TsunamiError } from './tsunami-error';
 import { TsunamiTransfersCriteria } from '../dto/tsunami/request/tsunami-transfers-criteria';
@@ -232,7 +233,7 @@ export class TsunamiRequestHandler extends HttpClient {
 
   async *getWalletTransfers(
     address: string,
-    criteria: TsunamiTransfersCriteria,
+    criteria: TsunamiWalletTransferCriteria,
     rangeOptions: TsunamiDataRangeOptions,
   ): AsyncGenerator<TsunamiTransfer, void, undefined> {
     const stream = this.query<TsunamiTransfer>(`/address/${address}/transfers`, criteria, rangeOptions);

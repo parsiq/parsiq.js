@@ -21,3 +21,4 @@ export * from './response/tsunami-decoded-log';
 export * from './request/abi';
 export * from './request/tsunami-transaction-internals-criteria';
 export * from './request/tsunami-stream-range-options';
+export * from './request/tsunami-wallet-transfer-criteria';
