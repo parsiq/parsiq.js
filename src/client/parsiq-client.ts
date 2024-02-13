@@ -9,6 +9,7 @@ import {
   TsunamiInternalTransaction,
   TsunamiDecodedInternalTransaction,
   TsunamiTransactionInternalsCriteria,
+  TsunamiWalletTransferCriteria,
 } from '../dto/tsunami';
 import { AxiosRequestConfig } from 'axios';
 import { IAxiosRetryConfig } from 'axios-retry';
@@ -301,7 +302,7 @@ class ParsiqClient {
         address: string,
         blockNumberStart: number,
         blockNumberEnd: number | typeof LATEST_TAG,
-        criteria: TsunamiTransfersCriteria,
+        criteria: TsunamiWalletTransferCriteria,
         rangeOptions?: RangeOptions,
       ) => {
         return this.tsunamiRequestHandler.getWalletTransfers(address, criteria, {
@@ -315,7 +316,7 @@ class ParsiqClient {
         address: string,
         timestampStart: number,
         timestampEnd: number,
-        criteria: TsunamiTransfersCriteria,
+        criteria: TsunamiWalletTransferCriteria,
         rangeOptions?: RangeOptions,
       ) => {
         return this.tsunamiRequestHandler.getWalletTransfers(address, criteria, {
@@ -328,7 +329,7 @@ class ParsiqClient {
       getByBlockHash: (
         address: string,
         blockHash: string,
-        criteria: TsunamiTransfersCriteria,
+        criteria: TsunamiWalletTransferCriteria,
         rangeOptions?: RangeOptions,
       ) => {
         return this.tsunamiRequestHandler.getWalletTransfers(address, criteria, {

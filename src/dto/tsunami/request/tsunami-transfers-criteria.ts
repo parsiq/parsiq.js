@@ -7,4 +7,6 @@ export interface TsunamiTransfersCriteria {
   direction?: TransferDirection;
 
   counterparty?: string;
+
+  origin?: string;
 }
