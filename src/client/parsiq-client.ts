@@ -29,7 +29,7 @@ import { CreateTransactionLifecycle } from '../dto/transaction-lifecycle';
 
 export enum ChainId {
   ETH_MAINNET = 'eip155-1', // Eth Mainnet
-  ETH_GOERLI = 'eip155-5', // Eth Goerli
+  ETH_HOLESKY = 'eip155-17000', // Eth Goerli
   ETH_SEPOLIA = 'eip155-11155111', // Eth Goerli
   AVALANCHE_MAINNET = 'eip155-43114', // Avax Mainnet
   BNB_MAINNET = 'eip155-56', // BNB Chain Mainnet
