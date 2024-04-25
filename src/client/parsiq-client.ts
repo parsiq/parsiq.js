@@ -39,7 +39,6 @@ export enum ChainId {
   POLYGON_ZKEVM_MAINNET = 'eip155-1101',
   BNB_TESTNET = 'eip155-97',
   OPBNB_TESTNET = 'eip155-5611',
-  POLYGON_MUMBAI = 'eip155-80001',
   ARBITRUM_SEPOLIA = 'eip155-421614',
 }
 
